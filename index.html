@@ -8,5 +8,28 @@
     <link rel='stylesheet' type='text/css' href='css/style.css'>
 </head>
 <body> 
+    <div id="update/delete-screen">
+        <form method="PATCH">
+            <label for="name">Name</label></form</br>
+            <input type="text" id="name" name="name"></br>
+            <label for="beschreibung">Beschreibung</label></form</br>
+            <input type="text" id="beschreibung" name="beschreibung"></br>
+            <label for="strasse">Straße</label></form</br>
+            <input type="text" id="strasse" name="strasse"></br>
+            <label for="PLZ">Postleitzahl</label></form</br>
+            <input type="text" id="PLZ" name="PLZ"></br>
+            <label for="stadt">Stadt</label></form</br>
+            <input type="text" id="stadt" name="stadt"></br>
+            <label for="latitude">Breitengrad</label></form</br>
+            <input type="text" id="latitude" name="latitude" value="144.2"></br>
+            <label for="longitude">Längengrad</label></form</br>
+            <input type="text" id="longitude" name="longitude" value="122.5"></br>
+            <button type="button">Update</button>
+            <button type="button">Cancel</button>
+        </form>
+        <form method="DELETE">
+            <button type="button">Delete</button>
+        </form>
+    </div>
 </body>
 </html>
