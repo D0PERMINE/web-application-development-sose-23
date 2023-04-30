@@ -1,0 +1,61 @@
+.main-screen {
+    text-align: center;
+}
+
+.welcome {
+    text-align: center;
+    color: black;
+    font-size: 50px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 18% 10px 18%;
+    border: solid;
+    padding: 10px;
+}
+
+.imgcontainer {
+    text-align: center;
+    flex-basis: 70%;
+    order: 2;
+}
+
+.img_fahrradwege_berlin {
+    width: 600px;
+}
+
+.img_fahrradwege_berlin_legende {
+    width: 400px;
+}
+
+.text {
+    color: #CD5C5C;
+    padding-right: 20px;
+    font: italic 30px "Fira Sans", serif;
+    text-align: right;
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 10%;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+    opacity: 0.8;
+}
+
+.footer {
+    text-align: center;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+}
