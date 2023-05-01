@@ -8,7 +8,9 @@
     <link rel='stylesheet' type='text/css' href='css/style.css'>
 </head>
 <body> 
-    <div id="update/delete-screen">
+    <div class="updatescreen">
+        <div class="updateform">
+        <h1 class="updatetitle">UPDATE/DELETE</h1>
         <form>
             <label for="name">Name</label></form</br>
             <input type="text" id="name" name="name" value="Nicht-nachhaltiger Ort"></br>
@@ -24,10 +26,13 @@
             <input type="text" id="latitude" name="latitude" value="144.2"></br>
             <label for="longitude">Längengrad</label></form</br>
             <input type="text" id="longitude" name="longitude" value="122.5"></br>
+            <div class="buttons">
             <button type="button">Update</button>
             <button type="button">Cancel</button>
-            <button type="button">Delete</button>
+            <button type="button">Delete</button> 
+            </div>
         </form>
+        </div>
     </div>
 </body>
 </html>
