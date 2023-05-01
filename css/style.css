@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.addtitle {
+    text-align: center;
+    font-size: 50px;
+    color: black;
+}
+
+
+.add-form {
+    margin: auto;
+    padding: 5px;
+    width: 50%;
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    cursor: pointer;
+    border: none;
+    margin: 8px 2px;
+    padding: 12px 20px;
+    width: 3cm;
+    text-align: center;
+}
+
+.buttons {
+    text-align: center;
+}
+
+button:hover{
+    opacity: 0.8;
+}
+
+label {
+    color:  black;
+    padding-right: 10px;
+    font-size: 17px;
+    width: 160px;
+    display: inline-block;
+    margin: 0.2cm;
+}
+
+input {
+    position: relative;
+    font-size: 17px;
+    margin: 5px 5px 0px 5px;
+}
+
