@@ -8,7 +8,6 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' href='css/style.css'>
 </head>
-
 <body>
     <div>
         <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
@@ -65,11 +64,37 @@
 					<button class="smallButton" type="submit">LOGOUT</button>
 
 			</div>
+      
+       <div class="add-screen">
+        <h1 class="addtitle">ADD</h1>
+        <div class="add-form">
+            <form>
+                <p>Mit * markierte Felder sind Pflichtfelder</p>
+                <label for="name">*Name:</label>
+                <input type="text" id="name" name="name" required></br>
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="Description"></br>
+                <label for="street">*Street & House No.:</label>
+                <input type="text" id="street" name="street" required></br>
+                <label for="postalcode">*Postal Code:</label>
+                <input type="text" id="postalcode" name="postalcode" required></br>
+                <label for="city">*City:</label>
+                <input type="text" id="city" name="city" value="Berlin" required></br>
+                <label for="latitude">Latitude:</label>
+                <input type="text" id="latitude" name="latitude"></br>
+                <label for="longitude">Longitude:</label>
+                <input type="text" id="longitude" name="longitude"></br>
+                <div class="buttons">
+                    <button class="addbuttons" type="submit">Save</button>
+                    <button class="addbuttons" type="button">Cancel</button>
+                </div>       
+            </form>
+        </div>
+    </div>
 	</body>
 
 	<footer class="footer">
 			<a href="">Imprint</a>
 			<a href="">Privacy</a>
 	</footer>
-
 </html>

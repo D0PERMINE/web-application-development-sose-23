@@ -1,4 +1,7 @@
 /* login-screen*/
+* {
+  font-family: "Roboto", sans-serif;
+}
 
 h1 {
     text-align: center;
@@ -118,7 +121,6 @@ span.psw {
 .text {
     color: #CD5C5C;
     padding-right: 20px;
-    font-family: 'Roboto', sans-serif;
     font-size: 30px;
     text-align: right;
 }
@@ -140,3 +142,47 @@ button:hover {
 }
 
 /* add-screen*/
+
+.addtitle {
+    text-align: center;
+    font-size: 50px;
+    color: black;
+}
+
+
+.add-form {
+    margin: 0px 39% 0px 39%;
+    padding: 10px;
+    text-align: center;
+    border: 3px #0a3805 solid;
+    border-radius: 20px;
+}
+
+.addbuttons {
+    background-color: #04AA6D;
+    color: white;
+    cursor: pointer;
+    border: none;
+    margin: 8px 2px 2px 2px;
+    padding: 12px 20px;
+    width: 3cm;
+    text-align: center;
+}
+
+.buttons {
+    text-align: center;
+}
+
+label {
+    color:  black;
+    font-size: 17px;
+    width: 160px;
+    display: inline-block;
+    text-align: right;
+}
+
+input {
+    position: relative;
+    font-size: 17px;
+    margin-bottom: 5px; 
+}
