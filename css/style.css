@@ -186,3 +186,30 @@ input {
     font-size: 17px;
     margin-bottom: 5px; 
 }
+
+/* update/delete-screen*/
+
+.update-form {
+    margin: 0px 39% 0px 39%;
+    padding: 10px;
+    text-align: center;
+    border: 3px #0a3805 solid;
+    border-radius: 20px;
+}
+
+.updatetitle {
+    text-align: center;
+    font-size: 50px;
+    color: black;
+}
+
+.updatebuttons {
+    background-color: #04AA6D;
+    color: white;
+    cursor: pointer;
+    border: none;
+    margin: 8px 2px 2px 2px;
+    padding: 12px 20px;
+    width: 3cm;
+    text-align: center;
+}

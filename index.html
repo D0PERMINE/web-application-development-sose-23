@@ -8,6 +8,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' href='css/style.css'>
 </head>
+
 <body>
     <div>
         <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
@@ -88,6 +89,33 @@
                     <button class="addbuttons" type="submit">Save</button>
                     <button class="addbuttons" type="button">Cancel</button>
                 </div>       
+            </form>
+        </div>
+    </div>
+    
+    <div class="updatescreen">
+        <h1 class="updatetitle">UPDATE/DELETE</h1>
+        <div class="updateform">
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="Nicht-nachhaltiger Ort"></br>
+                <label for="beschreibung">Beschreibung:</label>
+                <input type="text" id="beschreibung" name="beschreibung" value="Musterbeschreibung"></br>
+                <label for="strasse">Straße:</label>
+                <input type="text" id="strasse" name="strasse" value="Musterstraße 55"></br>
+                <label for="PLZ">Postleitzahl:</label>
+                <input type="text" id="PLZ" name="PLZ" value="12459"></br>
+                <label for="stadt">Stadt:</label>
+                <input type="text" id="stadt" name="stadt" value="Berlin"></br>
+                <label for="latitude">Breitengrad:</label>
+                <input type="text" id="latitude" name="latitude" value="144.2"></br>
+                <label for="longitude">Längengrad:</label>
+                <input type="text" id="longitude" name="longitude" value="122.5"></br>
+                <div class="buttons">
+                    <button class="updatebuttons" type="button">Update</button>
+                    <button class="updatebuttons" type="button">Cancel</button>
+                    <button class="updatebuttons" type="button">Delete</button> 
+                </div>
             </form>
         </div>
     </div>
