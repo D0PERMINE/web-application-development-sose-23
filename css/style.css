@@ -156,7 +156,7 @@ button:hover {
 
 
 .addform {
-    margin: 0px 39% 0px 39%;
+    margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
     border: 3px #0a3805 solid;
@@ -195,7 +195,7 @@ button:hover {
 /* update/delete-screen*/
 
 .updateform {
-    margin: 0px 39% 0px 39%;
+    margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
     border: 3px #0a3805 solid;
