@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -7,7 +8,91 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' href='css/style.css'>
 </head>
-<body> 
+
+<body>
+    <div>
+        <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
+
+        <form action="action_page.php" method="post">
+            <div class="imgcontainer">
+                <img src="resources/images/green_berlin.jpeg" alt="green_berlin" class="green_berlin">
+            </div>
+
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+
+                <button type="submit">Login</button>
+                <!-- <label>
+                <input type="checkbox" checked="checked" name="remember"> Remember me
+              </label> -->
+            </div>
+
+            <!-- <div class="container" style="background-color:#f1f1f1">
+              <button type="button" class="cancelbtn">Cancel</button>
+              <span class="psw">Forgot <a href="#">password?</a></span>
+            </div> -->
+        </form>
+    </div>
+
+		<div class="main-screen">
+					<p class="welcome">Welcome to our page. </p>
+					<p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
+					<div class="container">
+
+							<div class="text">
+									<p>Friedrichshain-Kreuzberg</p>
+									<p>Neukölln</p>
+									<p>Lichtenberg</p>
+							</div>
+
+							<div>
+									<div class="imgcontainer">
+											<img class="img_fahrradwege_berlin" src="resources/images/fahrradwege_berlin.png"
+													alt="fahrradwege_berlin">
+											<br>
+											<img class="img_fahrradwege_berlin_legende" src="resources/images/fahrradwege_berlin_legende.png"
+													alt="fahrradwege_berlin_legende">
+									</div>
+							</div>
+
+					</div>
+
+					<button class="smallButton" type="submit">ADD</button>
+					<button class="smallButton" type="submit">LOGOUT</button>
+
+			</div>
+      
+       <div class="add-screen">
+        <h1 class="addtitle">ADD</h1>
+        <div class="add-form">
+            <form>
+                <p>Mit * markierte Felder sind Pflichtfelder</p>
+                <label for="name">*Name:</label>
+                <input type="text" id="name" name="name" required></br>
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="Description"></br>
+                <label for="street">*Street & House No.:</label>
+                <input type="text" id="street" name="street" required></br>
+                <label for="postalcode">*Postal Code:</label>
+                <input type="text" id="postalcode" name="postalcode" required></br>
+                <label for="city">*City:</label>
+                <input type="text" id="city" name="city" value="Berlin" required></br>
+                <label for="latitude">Latitude:</label>
+                <input type="text" id="latitude" name="latitude"></br>
+                <label for="longitude">Longitude:</label>
+                <input type="text" id="longitude" name="longitude"></br>
+                <div class="buttons">
+                    <button class="addbuttons" type="submit">Save</button>
+                    <button class="addbuttons" type="button">Cancel</button>
+                </div>       
+            </form>
+        </div>
+    </div>
+    
     <div class="updatescreen">
         <h1 class="updatetitle">UPDATE/DELETE</h1>
         <div class="updateform">
@@ -27,12 +112,17 @@
                 <label for="longitude">Längengrad:</label>
                 <input type="text" id="longitude" name="longitude" value="122.5"></br>
                 <div class="buttons">
-                    <button type="button">Update</button>
-                    <button type="button">Cancel</button>
-                    <button type="button">Delete</button> 
+                    <button class="updatebuttons" type="button">Update</button>
+                    <button class="updatebuttons" type="button">Cancel</button>
+                    <button class="updatebuttons" type="button">Delete</button> 
                 </div>
             </form>
         </div>
     </div>
-</body>
+	</body>
+
+	<footer class="footer">
+			<a href="">Imprint</a>
+			<a href="">Privacy</a>
+	</footer>
 </html>
