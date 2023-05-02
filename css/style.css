@@ -10,9 +10,11 @@ body {
 
 
 .add-form {
-    margin: auto;
-    padding: 5px;
-    width: 50%;
+    margin: 0px 39% 0px 39%;
+    padding: 10px;
+    text-align: center;
+    border: 3px #0a3805 solid;
+    border-radius: 20px;
 }
 
 button {
@@ -20,7 +22,7 @@ button {
     color: white;
     cursor: pointer;
     border: none;
-    margin: 8px 2px;
+    margin: 8px 2px 2px 2px;
     padding: 12px 20px;
     width: 3cm;
     text-align: center;
@@ -36,16 +38,19 @@ button:hover{
 
 label {
     color:  black;
-    padding-right: 10px;
     font-size: 17px;
     width: 160px;
     display: inline-block;
-    margin: 0.2cm;
+    text-align: right;
 }
 
 input {
     position: relative;
     font-size: 17px;
-    margin: 5px 5px 0px 5px;
+    margin-bottom: 5px; 
+}
+
+p {
+    margin: 5px;
 }
 
