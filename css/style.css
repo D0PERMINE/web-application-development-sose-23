@@ -8,13 +8,12 @@ h1 {
 }
 
 /* Bordered form */
-form {
+.loginform {
     border: 3px solid #f1f1f1;
 }
 
 /* Full-width inputs */
-input[type=text],
-input[type=password] {
+.loginformcontainer input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -24,7 +23,7 @@ input[type=password] {
 }
 
 /* Set a style for all buttons */
-button {
+.loginformcontainer button {
     background-color: #04AA6D;
     color: white;
     padding: 14px 20px;
@@ -54,7 +53,7 @@ img.green_berlin {
 }
 
 /* Add padding to containers */
-.container {
+.loginformcontainer {
     padding: 16px;
 }
 
@@ -95,7 +94,7 @@ span.psw {
     margin-top: 10px;
 }
 
-.container {
+.mainmapcontainer {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,7 +125,13 @@ span.psw {
 }
 
 .smallButton {
-	    width: 10%;
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+	width: 10%;
 }
 
 /* Add a hover effect for buttons */
@@ -150,7 +155,7 @@ button:hover {
 }
 
 
-.add-form {
+.addform {
     margin: 0px 39% 0px 39%;
     padding: 10px;
     text-align: center;
@@ -173,7 +178,7 @@ button:hover {
     text-align: center;
 }
 
-label {
+.add label {
     color:  black;
     font-size: 17px;
     width: 160px;
@@ -181,15 +186,15 @@ label {
     text-align: right;
 }
 
-input {
-    position: relative;
+.add input {
     font-size: 17px;
     margin-bottom: 5px; 
 }
 
+
 /* update/delete-screen*/
 
-.update-form {
+.updateform {
     margin: 0px 39% 0px 39%;
     padding: 10px;
     text-align: center;
@@ -212,4 +217,17 @@ input {
     padding: 12px 20px;
     width: 3cm;
     text-align: center;
+}
+
+.update label {
+    color:  black;
+    font-size: 17px;
+    width: 160px;
+    display: inline-block;
+    text-align: right;
+} 
+
+.update input {
+    font-size: 17px;
+    margin-bottom: 5px; 
 }

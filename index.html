@@ -13,12 +13,12 @@
     <div>
         <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
 
-        <form action="action_page.php" method="post">
+        <form class="loginform" action="action_page.php" method="post">
             <div class="imgcontainer">
                 <img src="resources/images/green_berlin.jpeg" alt="green_berlin" class="green_berlin">
             </div>
 
-            <div class="container">
+            <div class="loginformcontainer">
                 <label for="uname"><b>Username</b></label>
                 <input type="text" placeholder="Enter Username" name="uname" required>
 
@@ -41,7 +41,7 @@
 		<div class="main-screen">
 					<p class="welcome">Welcome to our page. </p>
 					<p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
-					<div class="container">
+					<div class="mainmapcontainer">
 
 							<div class="text">
 									<p>Friedrichshain-Kreuzberg</p>
@@ -68,23 +68,30 @@
       
        <div class="add-screen">
         <h1 class="addtitle">ADD</h1>
-        <div class="add-form">
-            <form>
+        <div class="addform">
+            <form class="add">
                 <p>Mit * markierte Felder sind Pflichtfelder</p>
                 <label for="name">*Name:</label>
                 <input type="text" id="name" name="name" required></br>
+
                 <label for="description">Description:</label>
                 <input type="text" id="description" name="Description"></br>
+
                 <label for="street">*Street & House No.:</label>
                 <input type="text" id="street" name="street" required></br>
+
                 <label for="postalcode">*Postal Code:</label>
                 <input type="text" id="postalcode" name="postalcode" required></br>
+
                 <label for="city">*City:</label>
                 <input type="text" id="city" name="city" value="Berlin" required></br>
+
                 <label for="latitude">Latitude:</label>
                 <input type="text" id="latitude" name="latitude"></br>
+
                 <label for="longitude">Longitude:</label>
                 <input type="text" id="longitude" name="longitude"></br>
+
                 <div class="buttons">
                     <button class="addbuttons" type="submit">Save</button>
                     <button class="addbuttons" type="button">Cancel</button>
@@ -93,24 +100,31 @@
         </div>
     </div>
     
-    <div class="updatescreen">
+    <div class="update-screen">
         <h1 class="updatetitle">UPDATE/DELETE</h1>
         <div class="updateform">
-            <form>
+            <form class="update">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" value="Nicht-nachhaltiger Ort"></br>
+
                 <label for="beschreibung">Beschreibung:</label>
                 <input type="text" id="beschreibung" name="beschreibung" value="Musterbeschreibung"></br>
+
                 <label for="strasse">Straße:</label>
                 <input type="text" id="strasse" name="strasse" value="Musterstraße 55"></br>
+
                 <label for="PLZ">Postleitzahl:</label>
                 <input type="text" id="PLZ" name="PLZ" value="12459"></br>
+
                 <label for="stadt">Stadt:</label>
                 <input type="text" id="stadt" name="stadt" value="Berlin"></br>
+
                 <label for="latitude">Breitengrad:</label>
                 <input type="text" id="latitude" name="latitude" value="144.2"></br>
+
                 <label for="longitude">Längengrad:</label>
                 <input type="text" id="longitude" name="longitude" value="122.5"></br>
+                
                 <div class="buttons">
                     <button class="updatebuttons" type="button">Update</button>
                     <button class="updatebuttons" type="button">Cancel</button>
