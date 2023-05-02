@@ -5,7 +5,15 @@
 .welcome {
     text-align: center;
     color: black;
-    font-size: 50px;
+    font-size: 40px;
+    margin-bottom: 0px;
+}
+
+.p2 {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    margin-top: 10px;
 }
 
 .container {
@@ -34,7 +42,8 @@
 .text {
     color: #CD5C5C;
     padding-right: 20px;
-    font: italic 30px "Fira Sans", serif;
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
     text-align: right;
 }
 
