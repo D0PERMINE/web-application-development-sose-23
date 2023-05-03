@@ -9,7 +9,9 @@ h1 {
 
 /* Bordered form */
 .loginform {
-    border: 3px solid #f1f1f1;
+    border: 3px solid #071f05;
+    border-radius: 10px;
+    background-color: #eaf0e7;
 }
 
 /* Full-width inputs */
@@ -99,8 +101,10 @@ span.psw {
     align-items: center;
     justify-content: center;
     margin: 10px 18% 10px 18%;
-    border: solid;
+    border: solid #071f05;
+    border-radius: 10px;
     padding: 10px;
+    background-color: #eaf0e7;
 }
 
 .imgcontainer {
@@ -159,8 +163,14 @@ button:hover {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
-    border: 3px #0a3805 solid;
-    border-radius: 20px;
+    border: 3px #071f05 solid;
+    border-radius: 10px;
+    background-color: #eaf0e7;
+}
+
+.addform p {
+    margin: 2px 2px 10px 2px;
+    font-size: 13px;
 }
 
 .addbuttons {
@@ -198,8 +208,9 @@ button:hover {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
-    border: 3px #0a3805 solid;
-    border-radius: 20px;
+    border: 3px #071f05 solid;
+    border-radius: 10px;
+    background-color: #eaf0e7;
 }
 
 .updatetitle {

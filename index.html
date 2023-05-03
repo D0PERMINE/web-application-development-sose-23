@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div>
+    <div class="login-screen">
         <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
 
         <form class="loginform" action="action_page.php" method="post">
@@ -38,39 +38,36 @@
         </form>
     </div>
 
-		<div class="main-screen">
-					<p class="welcome">Welcome to our page. </p>
-					<p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
-					<div class="mainmapcontainer">
+    <div class="main-screen">
+        <p class="welcome">Welcome to our page. </p>
+        <p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
+        <div class="mainmapcontainer">
+            <div class="text">
+                    <p>Friedrichshain-Kreuzberg</p>
+                    <p>Neukölln</p>
+                    <p>Lichtenberg</p>
+            </div>
 
-							<div class="text">
-									<p>Friedrichshain-Kreuzberg</p>
-									<p>Neukölln</p>
-									<p>Lichtenberg</p>
-							</div>
+            <div>
+                <div class="imgcontainer">
+                    <img class="img_fahrradwege_berlin" src="resources/images/fahrradwege_berlin.png"
+                            alt="fahrradwege_berlin">
+                    <br>
+                    <img class="img_fahrradwege_berlin_legende" src="resources/images/fahrradwege_berlin_legende.png"
+                            alt="fahrradwege_berlin_legende">
+                </div>
+            </div>
+        </div>
 
-							<div>
-									<div class="imgcontainer">
-											<img class="img_fahrradwege_berlin" src="resources/images/fahrradwege_berlin.png"
-													alt="fahrradwege_berlin">
-											<br>
-											<img class="img_fahrradwege_berlin_legende" src="resources/images/fahrradwege_berlin_legende.png"
-													alt="fahrradwege_berlin_legende">
-									</div>
-							</div>
-
-					</div>
-
-					<button class="smallButton" type="submit">ADD</button>
-					<button class="smallButton" type="submit">LOGOUT</button>
-
-			</div>
+        <button class="smallButton" type="submit">ADD</button>
+        <button class="smallButton" type="submit">LOGOUT</button>
+    </div>
       
-       <div class="add-screen">
+    <div class="add-screen">
         <h1 class="addtitle">ADD</h1>
+
         <div class="addform">
             <form class="add">
-                <p>Mit * markierte Felder sind Pflichtfelder</p>
                 <label for="name">*Name:</label>
                 <input type="text" id="name" name="name" required></br>
 
@@ -86,11 +83,16 @@
                 <label for="city">*City:</label>
                 <input type="text" id="city" name="city" value="Berlin" required></br>
 
+                <label for="bezirk">Bezirk:</label>
+                <input type="text" id="bezirk" name="bezirk"></br>
+
                 <label for="latitude">Latitude:</label>
                 <input type="text" id="latitude" name="latitude"></br>
 
                 <label for="longitude">Longitude:</label>
                 <input type="text" id="longitude" name="longitude"></br>
+
+                <p>* Diese Felder müssen ausgefüllt werden</p>
 
                 <div class="buttons">
                     <button class="addbuttons" type="submit">Save</button>
@@ -102,28 +104,35 @@
     
     <div class="update-screen">
         <h1 class="updatetitle">UPDATE/DELETE</h1>
+
         <div class="updateform">
             <form class="update">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" value="Nicht-nachhaltiger Ort"></br>
+                <input type="text" id="name" name="name" value="Fahrradweg Herzbergstraße"></br>
 
                 <label for="beschreibung">Beschreibung:</label>
-                <input type="text" id="beschreibung" name="beschreibung" value="Musterbeschreibung"></br>
+                <input type="text" id="beschreibung" name="beschreibung" value="Auf der Herzbergstraße
+                 teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand
+                 als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und 
+                 den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst."></br>
 
                 <label for="strasse">Straße:</label>
-                <input type="text" id="strasse" name="strasse" value="Musterstraße 55"></br>
+                <input type="text" id="strasse" name="strasse" value="Herzbergstraße"></br>
 
                 <label for="PLZ">Postleitzahl:</label>
-                <input type="text" id="PLZ" name="PLZ" value="12459"></br>
+                <input type="text" id="PLZ" name="PLZ" value="10365"></br>
 
                 <label for="stadt">Stadt:</label>
                 <input type="text" id="stadt" name="stadt" value="Berlin"></br>
 
+                <label for="bezirk">Bezirk:</label>
+                <input type="text" id="bezirk" name="bezirk" value="Lichtenberg"></br>
+                
                 <label for="latitude">Breitengrad:</label>
-                <input type="text" id="latitude" name="latitude" value="144.2"></br>
+                <input type="text" id="latitude" name="latitude" value="52,526482"></br>
 
                 <label for="longitude">Längengrad:</label>
-                <input type="text" id="longitude" name="longitude" value="122.5"></br>
+                <input type="text" id="longitude" name="longitude" value="13,493836"></br>
                 
                 <div class="buttons">
                     <button class="updatebuttons" type="button">Update</button>
@@ -136,7 +145,7 @@
 	</body>
 
 	<footer class="footer">
-			<a href="">Imprint</a>
-			<a href="">Privacy</a>
+        <a href="">Imprint</a>
+        <a href="">Privacy</a>
 	</footer>
 </html>
