@@ -8,7 +8,7 @@ h1 {
 }
 
 /* Bordered form */
-.loginform {
+.login-form {
     border: 3px solid #071f05;
     border-radius: 10px;
     background-color: #eaf0e7;
@@ -16,7 +16,7 @@ h1 {
 }
 
 /* Full-width inputs */
-.loginformcontainer input {
+.login-form-container input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -26,7 +26,7 @@ h1 {
 }
 
 /* Set a style for all buttons */
-.loginformcontainer button {
+.login-form-container button {
     background-color: #04AA6D;
     color: white;
     padding: 14px 20px;
@@ -44,7 +44,7 @@ h1 {
 }
 
 /* Center the avatar image inside this container */
-.imgcontainer {
+.img-container {
     text-align: center;
     margin: 24px 0 12px 0;
 }
@@ -56,7 +56,7 @@ img.green_berlin {
 }
 
 /* Add padding to containers */
-.loginformcontainer {
+.log-inform-container {
     padding: 16px;
 }
 
@@ -98,7 +98,7 @@ span.psw {
     margin-top: 10px;
 }
 
-.mainmapcontainer {
+.main-map-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,17 +109,17 @@ span.psw {
     background-color: #eaf0e7;
 }
 
-.imgcontainer {
+.img-container {
     text-align: center;
     flex-basis: 70%;
     order: 2;
 }
 
-.img_fahrradwege_berlin {
+.img-fahrradwege-berlin {
     width: 600px;
 }
 
-.img_fahrradwege_berlin_legende {
+.img-fahrradwege-berlin-legende {
     width: 400px;
 }
 
@@ -130,7 +130,7 @@ span.psw {
     text-align: right;
 }
 
-.smallButton {
+.small-button {
     background-color: #04AA6D;
     color: white;
     padding: 14px 20px;
@@ -158,14 +158,14 @@ button:hover {
     display: none;
 }
 
-.addtitle {
+.add-title {
     text-align: center;
     font-size: 50px;
     color: black;
 }
 
 
-.addform {
+.add-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
@@ -174,12 +174,12 @@ button:hover {
     background-color: #eaf0e7;
 }
 
-.addform p {
+.add-form p {
     margin: 2px 2px 10px 2px;
     font-size: 13px;
 }
 
-.addbuttons {
+.add-buttons {
     background-color: #04AA6D;
     color: white;
     cursor: pointer;
@@ -214,7 +214,7 @@ button:hover {
     display: none;
 }
 
-.updateform {
+.update-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
@@ -223,13 +223,13 @@ button:hover {
     background-color: #eaf0e7;
 }
 
-.updatetitle {
+.update-title {
     text-align: center;
     font-size: 50px;
     color: black;
 }
 
-.updatebuttons {
+.update-buttons {
     background-color: #04AA6D;
     color: white;
     cursor: pointer;
