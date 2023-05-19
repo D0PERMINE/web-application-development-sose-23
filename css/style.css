@@ -12,6 +12,7 @@ h1 {
     border: 3px solid #071f05;
     border-radius: 10px;
     background-color: #eaf0e7;
+    /* display: none; */
 }
 
 /* Full-width inputs */
@@ -80,6 +81,7 @@ span.psw {
 /* main-screen*/
 .main-screen {
     text-align: center;
+    display: none;
 }
 
 .welcome {
@@ -152,6 +154,10 @@ button:hover {
 
 /* add-screen*/
 
+.add-screen {
+    display: none;
+}
+
 .addtitle {
     text-align: center;
     font-size: 50px;
@@ -203,6 +209,10 @@ button:hover {
 
 
 /* update/delete-screen*/
+
+.update-delete-screen {
+    display: none;
+}
 
 .updateform {
     margin: 0px 30% 0px 30%;
