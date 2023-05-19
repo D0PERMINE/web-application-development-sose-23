@@ -6,12 +6,16 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel='stylesheet' type='text/css' href='css/style.css'>
     <script defer src="src/main.js"></script>
 </head>
 
 <body>
-    <div class="login-screen">
+    <div id="login-screen">
         <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
 
         <form id="login-form">
@@ -49,7 +53,7 @@
         </footer>
     </div>
 
-    <div class="main-screen">
+    <div id="main-screen">
         <p class="welcome">Welcome to our page. </p>
         <p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
         <div class="main-map-container">
@@ -70,7 +74,7 @@
             </div>
         </div>
 
-        <button class="small-button" type="submit">ADD</button>
+        <button id="add-button" class="small-button" type="submit">ADD</button>
         <button class="small-button" type="submit">LOGOUT</button>
 
         <footer class="footer">
