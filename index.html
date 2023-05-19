@@ -14,9 +14,9 @@
     <div class="login-screen">
         <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
 
-        <form class="login-form" action="action_page.php" method="post">
+        <form id="login-form">
             <div class="img-container">
-                <img src="resources/images/green_berlin.jpeg" alt="green_berlin" class="green-berlin">
+                <img src="resources/images/green_berlin.jpeg" alt="green_berlin" class="img-green-berlin">
             </div>
 
             <div class="login-form-container">
@@ -25,13 +25,13 @@
                     <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
                 </div>
 
-                <label for="uname"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="uname" required>
+                <label><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
 
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
+                <label><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
 
-                <button class="submit-button" type="submit">Login</button>
+                <button id="submit-button" type="submit">Login</button>
                 <!-- <label>
                         <input type="checkbox" checked="checked" name="remember"> Remember me
                     </label> -->
