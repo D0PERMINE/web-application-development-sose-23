@@ -1,6 +1,6 @@
 /* login-screen*/
 * {
-  font-family: "Roboto", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 h1 {
@@ -8,15 +8,14 @@ h1 {
 }
 
 /* Bordered form */
-.loginform {
+#login-form {
     border: 3px solid #071f05;
     border-radius: 10px;
     background-color: #eaf0e7;
-    /* display: none; */
 }
 
 /* Full-width inputs */
-.loginformcontainer input {
+.login-form-container input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -26,7 +25,7 @@ h1 {
 }
 
 /* Set a style for all buttons */
-.loginformcontainer button {
+.login-form-container button {
     background-color: #04AA6D;
     color: white;
     padding: 14px 20px;
@@ -36,28 +35,53 @@ h1 {
     width: 100%;
 }
 
-	/* Extra style for the cancel button (red) */
-.cancelbtn {
+/* Extra style for the cancel button (red) */
+.cancel-btn {
     width: auto;
     padding: 10px 18px;
     background-color: #f44336;
 }
 
 /* Center the avatar image inside this container */
-.imgcontainer {
+.img-container {
     text-align: center;
-    margin: 24px 0 12px 0;
+    margin: 24px 0 0 0;
 }
 
 /* Avatar image */
-img.green_berlin {
+.img-green-berlin {
     width: 40%;
     border-radius: 50%;
 }
 
 /* Add padding to containers */
-.loginformcontainer {
+.login-form-container {
     padding: 16px;
+}
+
+#login-error-msg-holder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+#login-error-msg {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #8a0000;
+    border: 1px solid #8a0000;
+    background-color: #e58f8f;
+    opacity: 0;
+}
+
+#error-msg-second-line {
+    display: block;
 }
 
 /* The "Forgot password" text */
@@ -73,13 +97,13 @@ span.psw {
         float: none;
     }
 
-    .cancelbtn {
+    .cancel-btn {
         width: 100%;
     }
 }
 
 /* main-screen*/
-.main-screen {
+#main-screen {
     text-align: center;
     display: none;
 }
@@ -98,7 +122,7 @@ span.psw {
     margin-top: 10px;
 }
 
-.mainmapcontainer {
+.main-map-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,17 +133,17 @@ span.psw {
     background-color: #eaf0e7;
 }
 
-.imgcontainer {
+.img-container {
     text-align: center;
     flex-basis: 70%;
     order: 2;
 }
 
-.img_fahrradwege_berlin {
+.img-fahrradwege-berlin {
     width: 600px;
 }
 
-.img_fahrradwege_berlin_legende {
+.img-fahrradwege-berlin-legende {
     width: 400px;
 }
 
@@ -130,14 +154,14 @@ span.psw {
     text-align: right;
 }
 
-.smallButton {
+.small-button {
     background-color: #04AA6D;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
-	width: 10%;
+    width: 10%;
 }
 
 /* Add a hover effect for buttons */
@@ -158,14 +182,14 @@ button:hover {
     display: none;
 }
 
-.addtitle {
+.add-title {
     text-align: center;
     font-size: 50px;
     color: black;
 }
 
 
-.addform {
+.add-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
@@ -174,12 +198,12 @@ button:hover {
     background-color: #eaf0e7;
 }
 
-.addform p {
+.add-form p {
     margin: 2px 2px 10px 2px;
     font-size: 13px;
 }
 
-.addbuttons {
+.add-buttons {
     background-color: #04AA6D;
     color: white;
     cursor: pointer;
@@ -195,7 +219,7 @@ button:hover {
 }
 
 .add label {
-    color:  black;
+    color: black;
     font-size: 17px;
     width: 160px;
     display: inline-block;
@@ -204,7 +228,7 @@ button:hover {
 
 .add input {
     font-size: 17px;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
 
 
@@ -214,7 +238,7 @@ button:hover {
     display: none;
 }
 
-.updateform {
+.update-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
@@ -223,13 +247,13 @@ button:hover {
     background-color: #eaf0e7;
 }
 
-.updatetitle {
+.update-title {
     text-align: center;
     font-size: 50px;
     color: black;
 }
 
-.updatebuttons {
+.update-buttons {
     background-color: #04AA6D;
     color: white;
     cursor: pointer;
@@ -241,14 +265,14 @@ button:hover {
 }
 
 .update label {
-    color:  black;
+    color: black;
     font-size: 17px;
     width: 160px;
     display: inline-block;
     text-align: right;
-} 
+}
 
 .update input {
     font-size: 17px;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
