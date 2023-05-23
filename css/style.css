@@ -147,7 +147,7 @@ span.psw {
     width: 400px;
 }
 
-.text {
+.text select {
     color: #CD5C5C;
     padding-right: 20px;
     font-size: 30px;
@@ -178,7 +178,7 @@ button:hover {
 
 /* add-screen*/
 
-.add-screen {
+#add-screen {
     display: none;
 }
 
@@ -189,7 +189,7 @@ button:hover {
 }
 
 
-.add-form {
+#add-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
@@ -203,7 +203,7 @@ button:hover {
     font-size: 13px;
 }
 
-.add-buttons {
+.add-screen-buttons {
     background-color: #04AA6D;
     color: white;
     cursor: pointer;
@@ -234,11 +234,11 @@ button:hover {
 
 /* update/delete-screen*/
 
-.update-delete-screen {
+#update-delete-screen {
     display: none;
 }
 
-.update-form {
+#update-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;
     text-align: center;
