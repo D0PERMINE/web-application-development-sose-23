@@ -58,7 +58,7 @@
         <p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
         <div class="main-map-container">
             <div class="text">
-                <select id="mySelect" size="8">
+                <select id="locations-select" size="8">
                     <option>Friedrichshain-Kreuzberg</option>
                     <option>Neukölln</option>
                     <option>Lichtenberg</option>
@@ -76,12 +76,31 @@
             </div>
         </div>
 
+        <div id="location-details">
+            <ul>
+                <li>Name: </li>
+                <li>Description: </li>
+                <li>Street & House No.: </li>
+                <li>Postal Code: </li>
+                <li>City: </li>
+                <li>District: </li>
+                <li>Latitude: </li>
+                <li>Longitude: </li>
+            </ul>
+
+            <div class="buttons">
+                <button id="update-button" class="add-screen-buttons" type="submit">Update</button>
+                <button id="delete-button" class="add-screen-buttons" type="button">Delete</button>
+                <button id="details-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
+            </div>
+        </div>
+
         <button id="main-screen-add-button" class="small-button" type="submit">ADD</button>
         <button id="logout-button" class="small-button" type="submit">LOGOUT</button>
 
         <footer class="footer">
-            <a href="">Imprint</a>
-            <a href="">Privacy</a>
+            <a>Imprint</a>
+            <a>Privacy</a>
         </footer>
     </div>
 

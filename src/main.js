@@ -4,16 +4,25 @@ const loginErrorMsg = document.getElementById("login-error-msg");
 
 const loginScreen = document.getElementById("login-screen");
 const mainScreen = document.getElementById("main-screen");
+const locationSelect = document.getElementById("locations-select");
 const addButton = document.getElementById("main-screen-add-button");
 const logoutButton = document.getElementById("logout-button");
 
 const addScreen = document.getElementById("add-screen");
 const addButtonSubmit = document.getElementById("add-screen-add-button");
-const cancelButton = document.getElementById("add-screen-cancel-button");
+const addScreenCancelButton = document.getElementById("add-screen-cancel-button");
+
+const detailsScreen = document.getElementById("location-details");
+const updateButton = document.getElementById("update-button");
+const deleteButton = document.getElementById("delete-button");
+const detailsScreenCancelButton = document.getElementById("details-screen-cancel-button");
+
+let locationOne = {
+    name: "Friedrichshain-Kreuzberg"
+};
 
 loginButton.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log("OKKK: " + loginForm.username.value);
     const username = loginForm.username.value;
     const password = loginForm.password.value;
 
@@ -22,6 +31,7 @@ loginButton.addEventListener("click", (e) => {
         // location.reload();
         loginScreen.style.display = "none";
         mainScreen.style.display = "block";
+        addButton.style.display = "inline";
         document.getElementById("welcome").textContent = "Welcome " + username + ".";
 
         loginForm.reset();
@@ -45,6 +55,15 @@ loginButton.addEventListener("click", (e) => {
     }
 })
 
+
+locationSelect.addEventListener("change", (e) =>{
+    let selectedLocation = locationSelect.options[locationSelect.selectedIndex].textContent;
+    console.log(selectedLocation);
+    //detailsScreen.ul.li.textContent.concat(selectedLocation);
+
+    detailsScreen.style.display = "block";
+})
+
 logoutButton.addEventListener("click", (e) => {
     console.log("OKKK: " + loginForm.username.value + "logged out");
 
@@ -62,7 +81,7 @@ addButton.addEventListener("click", (e) => {
     addScreen.style.display = "block";
 })
 
-cancelButton.addEventListener("click", (e) => {
+addScreenCancelButton.addEventListener("click", (e) => {
     console.log("Cancelled add.");
 
     addScreen.style.display = "none";
