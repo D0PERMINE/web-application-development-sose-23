@@ -12,14 +12,25 @@ const addScreen = document.getElementById("add-screen");
 const addButtonSubmit = document.getElementById("add-screen-add-button");
 const addScreenCancelButton = document.getElementById("add-screen-cancel-button");
 
-const detailsScreen = document.getElementById("location-details");
+const detailsScreen = document.getElementById("update-delete-screen");
 const updateButton = document.getElementById("update-button");
 const deleteButton = document.getElementById("delete-button");
 const detailsScreenCancelButton = document.getElementById("details-screen-cancel-button");
 
-let locationOne = {
-    name: "Friedrichshain-Kreuzberg"
-};
+function Location(name, description, street, postalcode, city, district, lat, long) {
+    this.name = name;
+    this.description = description;
+    this.street = street;
+    this.postalcode = postalcode;
+    this.city = city;
+    this.district = district;
+    this.lat = lat;
+    this.long = long;
+}
+
+let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
+let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
+let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 
 loginButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -55,6 +66,22 @@ loginButton.addEventListener("click", (e) => {
     }
 })
 
+logoutButton.addEventListener("click", (e) => {
+    mainScreen.style.display = "none";
+    loginScreen.style.display = "block";
+
+    //alert("Logged out successfully.");
+})
+
+addButton.addEventListener("click", (e) => {
+    mainScreen.style.display = "none";
+    addScreen.style.display = "block";
+})
+
+addScreenCancelButton.addEventListener("click", (e) => {
+    addScreen.style.display = "none";
+    mainScreen.style.display = "block";
+})
 
 locationSelect.addEventListener("change", (e) =>{
     let selectedLocation = locationSelect.options[locationSelect.selectedIndex].textContent;
@@ -62,28 +89,10 @@ locationSelect.addEventListener("change", (e) =>{
     //detailsScreen.ul.li.textContent.concat(selectedLocation);
 
     detailsScreen.style.display = "block";
-})
-
-logoutButton.addEventListener("click", (e) => {
-    console.log("OKKK: " + loginForm.username.value + "logged out");
-
     mainScreen.style.display = "none";
-    loginScreen.style.display = "block";
+ })
 
-    //alert("Logged out successfully.");
-})
-
-
-addButton.addEventListener("click", (e) => {
-    console.log("Switched to add screen");
-
-    mainScreen.style.display = "none";
-    addScreen.style.display = "block";
-})
-
-addScreenCancelButton.addEventListener("click", (e) => {
-    console.log("Cancelled add.");
-
-    addScreen.style.display = "none";
+ detailsScreenCancelButton.addEventListener("click", (e) =>{
+    detailsScreen.style.display = "none";
     mainScreen.style.display = "block";
-})
+ })
