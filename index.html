@@ -35,7 +35,7 @@
                 <label><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="password" required>
 
-                <button id="submit-button" type="submit">Login</button>
+                <button id="login-button" type="submit">Login</button>
                 <!-- <label>
                         <input type="checkbox" checked="checked" name="remember"> Remember me
                     </label> -->
@@ -54,13 +54,15 @@
     </div>
 
     <div id="main-screen">
-        <p class="welcome">Welcome to our page. </p>
+        <p id="welcome" class="welcome">Welcome to our page. </p>
         <p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
         <div class="main-map-container">
             <div class="text">
-                <p>Friedrichshain-Kreuzberg</p>
-                <p>Neukölln</p>
-                <p>Lichtenberg</p>
+                <select id="locations-select" size="8">
+                    <option>Friedrichshain-Kreuzberg</option>
+                    <option>Neukölln</option>
+                    <option>Lichtenberg</option>
+                </select>
             </div>
 
             <div>
@@ -74,37 +76,56 @@
             </div>
         </div>
 
-        <button id="add-button" class="small-button" type="submit">ADD</button>
-        <button class="small-button" type="submit">LOGOUT</button>
+        <div id="location-details">
+            <ul>
+                <li>Name: </li>
+                <li>Description: </li>
+                <li>Street & House No.: </li>
+                <li>Postal Code: </li>
+                <li>City: </li>
+                <li>District: </li>
+                <li>Latitude: </li>
+                <li>Longitude: </li>
+            </ul>
+
+            <div class="buttons">
+                <button id="update-button" class="add-screen-buttons" type="submit">Update</button>
+                <button id="delete-button" class="add-screen-buttons" type="button">Delete</button>
+                <button id="details-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
+            </div>
+        </div>
+
+        <button id="main-screen-add-button" class="small-button" type="submit">ADD</button>
+        <button id="logout-button" class="small-button" type="submit">LOGOUT</button>
 
         <footer class="footer">
-            <a href="">Imprint</a>
-            <a href="">Privacy</a>
+            <a>Imprint</a>
+            <a>Privacy</a>
         </footer>
     </div>
 
-    <div class="add-screen">
+    <div id="add-screen">
         <h1 class="add-title">ADD</h1>
 
-        <div class="add-form">
+        <div id="add-form">
             <form class="add">
                 <label for="name">*Name:</label>
                 <input type="text" id="name" name="name" required></br>
 
                 <label for="description">Description:</label>
-                <input type="text" id="description" name="Description"></br>
+                <input type="text" id="description" name="description"></br>
 
                 <label for="street">*Street & House No.:</label>
                 <input type="text" id="street" name="street" required></br>
 
-                <label for="postalcode">*Postal Code:</label>
-                <input type="text" id="postalcode" name="postalcode" required></br>
+                <label for="postal-code">*Postal Code:</label>
+                <input type="text" id="postal-code" name="postal-code" required></br>
 
                 <label for="city">*City:</label>
                 <input type="text" id="city" name="city" value="Berlin" required></br>
 
-                <label for="bezirk">Bezirk:</label>
-                <input type="text" id="bezirk" name="bezirk"></br>
+                <label for="district">District:</label>
+                <input type="text" id="district" name="district"></br>
 
                 <label for="latitude">Latitude:</label>
                 <input type="text" id="latitude" name="latitude"></br>
@@ -115,8 +136,8 @@
                 <p>* Diese Felder müssen ausgefüllt werden</p>
 
                 <div class="buttons">
-                    <button class="add-buttons" type="submit">Save</button>
-                    <button class="add-buttons" type="button">Cancel</button>
+                    <button id="add-screen-add-button" class="add-screen-buttons" type="submit">Save</button>
+                    <button id="add-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
                 </div>
             </form>
         </div>
@@ -127,36 +148,36 @@
         </footer>
     </div>
 
-    <div class="update-delete-screen">
+    <div id="update-delete-screen">
         <h1 class="update-title">UPDATE/DELETE</h1>
 
-        <div class="update-form">
+        <div id="update-form">
             <form class="update">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" value="Fahrradweg Herzbergstraße"></br>
 
-                <label for="beschreibung">Beschreibung:</label>
-                <input type="text" id="beschreibung" name="beschreibung" value="Auf der Herzbergstraße
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description" value="Auf der Herzbergstraße
                  teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand
                  als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und 
                  den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst."></br>
 
-                <label for="strasse">Straße:</label>
-                <input type="text" id="strasse" name="strasse" value="Herzbergstraße"></br>
+                <label for="street">Street:</label>
+                <input type="text" id="street" name="street" value="Herzbergstraße"></br>
 
-                <label for="PLZ">Postleitzahl:</label>
-                <input type="text" id="PLZ" name="PLZ" value="10365"></br>
+                <label for="postal-code">Postal Code::</label>
+                <input type="text" id="postal-code" name="postal-code" value="10365"></br>
 
-                <label for="stadt">Stadt:</label>
-                <input type="text" id="stadt" name="stadt" value="Berlin"></br>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" value="Berlin"></br>
 
-                <label for="bezirk">Bezirk:</label>
-                <input type="text" id="bezirk" name="bezirk" value="Lichtenberg"></br>
+                <label for="district">District:</label>
+                <input type="text" id="district" name="district" value="Lichtenberg"></br>
 
-                <label for="latitude">Breitengrad:</label>
+                <label for="latitude">Latitude:</label>
                 <input type="text" id="latitude" name="latitude" value="52,526482"></br>
 
-                <label for="longitude">Längengrad:</label>
+                <label for="longitude">Longitude:</label>
                 <input type="text" id="longitude" name="longitude" value="13,493836"></br>
 
                 <div class="buttons">
