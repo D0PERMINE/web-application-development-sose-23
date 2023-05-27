@@ -11,6 +11,8 @@ const logoutButton = document.getElementById("logout-button");
 const addScreen = document.getElementById("add-screen");
 const addButtonSubmit = document.getElementById("add-screen-add-button");
 const addScreenCancelButton = document.getElementById("add-screen-cancel-button");
+const latitudeInput = document.getElementById("latitude");
+const longitudeInput = document.getElementById("longitude");
 
 const detailsScreen = document.getElementById("location-details");
 const updateButton = document.getElementById("update-button");
@@ -49,8 +51,15 @@ loginButton.addEventListener("click", (e) => {
         //alert("You have successfully logged in as normalo.");
     } else {
         console.log("LOL");
+        const berlin2 = { lat: 50.531677, lng: 15.381777 };
+
+        const marker3 = new google.maps.Marker({
+            position: berlin2,
+            map: map,
+        });
         loginErrorMsg.style.opacity = 1;
         loginForm.reset();
+
 
         // loginErrorMsg.style.display = "block";
         // loginErrorMsg.style.visibility = "visible";
@@ -83,6 +92,23 @@ addButton.addEventListener("click", (e) => {
     addScreen.style.display = "block";
 })
 
+addButtonSubmit.addEventListener("click", (e) => {
+    console.log("add button clicked");
+    TestMarker();
+    
+    const url = "https://maps.googleapis.com/maps/api/geocode/json?address=berlin&key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
+
+    fetch(url).then(function(response) {
+        return response.json();
+      }).then(function(data) {
+        console.log(data);
+      }).catch(function(err) {
+        console.log('Fetch Error :-S', err);
+      });
+    
+
+})
+
 addScreenCancelButton.addEventListener("click", (e) => {
     console.log("Cancelled add.");
 
@@ -91,13 +117,15 @@ addScreenCancelButton.addEventListener("click", (e) => {
 })
 
 // google-maps
+var map;
 // Initialize and add the map
 function initMap() {
     // The location of Uluru
     const uluru = { lat: 52.531677, lng: 13.381777 };
     const berlin = { lat: 51.531677, lng: 14.381777 };
+
     // The map, centered at Uluru
-    const map = new google.maps.Map(document.getElementById("map"), {
+    map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
         center: uluru
     });
@@ -113,7 +141,23 @@ function initMap() {
         map: map,
     });
 
+    
+
 }
 
-// window.initMap = initMap;
+// Function for adding a marker to the page.
+function addMarker(location) {
+    marker = new google.maps.Marker({
+        position: location,
+        map: map
+    });
+}
+
+function TestMarker() {
+    // CentralPark = new google.maps.LatLng(50.7699298, 15.4469157);
+    CentralPark = {lat: + latitudeInput.value, lng: + longitudeInput.value};
+    addMarker(CentralPark);
+}
+
+window.initMap = initMap;
 
