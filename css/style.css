@@ -105,7 +105,7 @@ span.psw {
 /* main-screen*/
 #main-screen {
     text-align: center;
-    display: none;
+    /* display: none; */
 }
 
 .welcome {
@@ -131,21 +131,24 @@ span.psw {
     border-radius: 10px;
     padding: 10px;
     background-color: #eaf0e7;
+    display: inline-flex;
 }
-
-.img-container {
+/* 
+.google-maps-container {
     text-align: center;
     flex-basis: 70%;
     order: 2;
+} */
+
+#map {
+    height: 550px;
+    width: 650px;
+    margin-left: 30px;
 }
 
-.img-fahrradwege-berlin {
-    width: 600px;
-}
-
-.img-fahrradwege-berlin-legende {
+/* .img-fahrradwege-berlin-legende {
     width: 400px;
-}
+} */
 
 .text select {
     color: #CD5C5C;

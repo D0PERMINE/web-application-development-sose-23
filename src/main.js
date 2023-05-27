@@ -87,3 +87,23 @@ addScreenCancelButton.addEventListener("click", (e) => {
     addScreen.style.display = "none";
     mainScreen.style.display = "block";
 })
+
+// google-maps
+// Initialize and add the map
+function initMap() {
+    // The location of Uluru
+    const uluru = { lat: 52.531677, lng: 13.381777 };
+    const berlin = { lat: 51.531677, lng: 14.381777 };
+    // The map, centered at Uluru
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 10,
+      center: uluru, berlin
+    });
+    // The marker, positioned at Uluru
+    const marker = new google.maps.Marker({
+      position: uluru,
+      map: map,
+    });
+  }
+  
+  window.initMap = initMap;

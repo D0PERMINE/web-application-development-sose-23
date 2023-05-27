@@ -11,7 +11,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel='stylesheet' type='text/css' href='css/style.css'>
-    <script defer src="src/main.js"></script>
+
+    <!-- google-maps -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="src/main.js"></script>
+
 </head>
 
 <body>
@@ -66,12 +70,19 @@
             </div>
 
             <div>
-                <div class="img-container">
+                <!-- <div class="img-container">
                     <img class="img-fahrradwege-berlin" src="resources/images/fahrradwege_berlin.png"
                         alt="fahrradwege_berlin">
                     <br>
                     <img class="img-fahrradwege-berlin-legende" src="resources/images/fahrradwege_berlin_legende.png"
                         alt="fahrradwege_berlin_legende">
+                </div> -->
+                <div class="google-maps-container">
+                    <!-- google-maps -->
+                    <div id="map"></div>
+                    <script
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ&callback=initMap&v=weekly"
+                        defer></script>
                 </div>
             </div>
         </div>
