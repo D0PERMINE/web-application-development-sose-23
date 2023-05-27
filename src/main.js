@@ -48,15 +48,17 @@ loginButton.addEventListener("click", (e) => {
 
         //alert("You have successfully logged in as normalo.");
     } else {
+        console.log("LOL");
         loginErrorMsg.style.opacity = 1;
         loginForm.reset();
+
         // loginErrorMsg.style.display = "block";
         // loginErrorMsg.style.visibility = "visible";
     }
 })
 
 
-locationSelect.addEventListener("change", (e) =>{
+locationSelect.addEventListener("change", (e) => {
     let selectedLocation = locationSelect.options[locationSelect.selectedIndex].textContent;
     console.log(selectedLocation);
     //detailsScreen.ul.li.textContent.concat(selectedLocation);
@@ -96,14 +98,22 @@ function initMap() {
     const berlin = { lat: 51.531677, lng: 14.381777 };
     // The map, centered at Uluru
     const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 10,
-      center: uluru, berlin
+        zoom: 10,
+        center: uluru
     });
+
     // The marker, positioned at Uluru
     const marker = new google.maps.Marker({
-      position: uluru,
-      map: map,
+        position: uluru,
+        map: map,
     });
-  }
-  
-  window.initMap = initMap;
+
+    const marker2 = new google.maps.Marker({
+        position: berlin,
+        map: map,
+    });
+
+}
+
+// window.initMap = initMap;
+
