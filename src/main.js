@@ -13,6 +13,7 @@ const addButtonSubmit = document.getElementById("add-screen-add-button");
 const addScreenCancelButton = document.getElementById("add-screen-cancel-button");
 
 const detailsScreen = document.getElementById("update-delete-screen");
+const updateForm = document.getElementById("update-form");
 const updateButton = document.getElementById("update-button");
 const deleteButton = document.getElementById("delete-button");
 const detailsScreenCancelButton = document.getElementById("details-screen-cancel-button");
@@ -31,6 +32,9 @@ function Location(name, description, street, postalcode, city, district, lat, lo
 let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
+
+let locationList = new Array();
+locationList.push(locationOne, locationTwo, locationThree);
 
 loginButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -83,10 +87,21 @@ addScreenCancelButton.addEventListener("click", (e) => {
     mainScreen.style.display = "block";
 })
 
+function changeUpdateForm(locationIndex) {
+    updateForm.name.value = locationList[locationIndex].name;
+}
+
 locationSelect.addEventListener("change", (e) =>{
     let selectedLocation = locationSelect.options[locationSelect.selectedIndex].textContent;
-    console.log(selectedLocation);
-    //detailsScreen.ul.li.textContent.concat(selectedLocation);
+    let selectedLocationIndex;
+
+    for(let i = 0; i < locationList.length; i++){
+        if(locationList[i].name == selectedLocation) {
+            selectedLocationIndex = i;
+        }
+    }
+
+    changeUpdateForm(selectedLocationIndex);
 
     detailsScreen.style.display = "block";
     mainScreen.style.display = "none";
