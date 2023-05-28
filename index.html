@@ -11,7 +11,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel='stylesheet' type='text/css' href='css/style.css'>
+
+    <!-- google-maps -->
     <script defer src="src/main.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
 </head>
 
 <body>
@@ -66,18 +70,28 @@
             </div>
 
             <div>
-                <div class="img-container">
+                <!-- <div class="img-container">
                     <img class="img-fahrradwege-berlin" src="resources/images/fahrradwege_berlin.png"
                         alt="fahrradwege_berlin">
                     <br>
                     <img class="img-fahrradwege-berlin-legende" src="resources/images/fahrradwege_berlin_legende.png"
                         alt="fahrradwege_berlin_legende">
+                </div> -->
+                <div class="google-maps-container">
+                    <!-- google-maps -->
+                    <div id="map"></div>
+                    <script
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ&callback=initMap&v=weekly"
+                        defer></script>
                 </div>
             </div>
         </div>
 
+        <br>
+        
         <button id="main-screen-add-button" class="small-button" type="submit">ADD</button>
         <button id="logout-button" class="small-button" type="submit">LOGOUT</button>
+        
 
         <footer class="footer">
             <a href="">Imprint</a>
@@ -114,7 +128,7 @@
             <input type="text" id="longitude" name="longitude"></br>
 
             <p>* Diese Felder müssen ausgefüllt werden</p>
-
+            <!-- submit zu button ändern falls map pins resettet werden-->
             <div class="buttons">
                 <button id="add-screen-add-button" class="add-screen-buttons" type="submit">Save</button>
                 <button id="add-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
@@ -171,6 +185,7 @@
             <a href="">Privacy</a>
         </footer>
     </div>
+
 </body>
 
 
