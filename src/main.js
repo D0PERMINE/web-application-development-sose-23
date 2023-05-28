@@ -29,6 +29,7 @@ function Location(name, description, street, postalcode, city, district, lat, lo
     this.long = long;
 }
 
+let currentLocationIndex;
 let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
@@ -89,10 +90,16 @@ addScreenCancelButton.addEventListener("click", (e) => {
 
 function changeUpdateForm(locationIndex) {
     updateForm.name.value = locationList[locationIndex].name;
+    updateForm.description.value = locationList[locationIndex].description;
+    updateForm.street.value = locationList[locationIndex].street;
+    updateForm.postalcode.value = locationList[locationIndex].postalcode;
+    updateForm.city.value = locationList[locationIndex].city;
+    updateForm.district.value = locationList[locationIndex].district;
+    updateForm.latitude.value = locationList[locationIndex].lat;
+    updateForm.longitude.value = locationList[locationIndex].long;
 }
 
-locationSelect.addEventListener("change", (e) =>{
-    let selectedLocation = locationSelect.options[locationSelect.selectedIndex].textContent;
+function findLocationInList(selectedLocation) {
     let selectedLocationIndex;
 
     for(let i = 0; i < locationList.length; i++){
@@ -101,10 +108,40 @@ locationSelect.addEventListener("change", (e) =>{
         }
     }
 
-    changeUpdateForm(selectedLocationIndex);
+    return selectedLocationIndex;
+}
+
+locationSelect.addEventListener("change", (e) =>{
+    let selectedLocation = locationSelect.options[locationSelect.selectedIndex].textContent;
+    
+    currentLocationIndex = findLocationInList(selectedLocation);
+
+    changeUpdateForm(currentLocationIndex);
 
     detailsScreen.style.display = "block";
     mainScreen.style.display = "none";
+ })
+
+ function changeLocation(locationIndex) {
+    locationList[locationIndex].name = updateForm.name.value;
+    locationList[locationIndex].description = updateForm.description.value;
+    locationList[locationIndex].street = updateForm.street.value;
+    locationList[locationIndex].postalcode = updateForm.postalcode.value;
+    locationList[locationIndex].city = updateForm.city.value;
+    locationList[locationIndex].district = updateForm.district.value;
+    locationList[locationIndex].lat = updateForm.latitude.value;
+    locationList[locationIndex].long = updateForm.longitude.value;
+ }
+ 
+ updateButton.addEventListener("click", (e) =>{
+    e.preventDefault();
+    
+    changeLocation(currentLocationIndex);
+
+    detailsScreen.style.display = "none";
+    mainScreen.style.display = "block";
+
+    loginForm.reset();
  })
 
  detailsScreenCancelButton.addEventListener("click", (e) =>{
