@@ -161,6 +161,9 @@ function loadDetailsScreen(currentUser) {
     else if(currentUser == "normalo") {
         updateButton.style.display = "none";
         deleteButton.style.display = "none";
+        for(let i = 0; i < updateForm.length; i++) {
+            updateForm.elements[i].readOnly = true;
+        }
     }
 }
 
