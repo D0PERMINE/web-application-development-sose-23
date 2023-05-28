@@ -95,7 +95,7 @@ addButton.addEventListener("click", (e) => {
 addButtonSubmit.addEventListener("click", (e) => {
     console.log("add button clicked");
     TestMarker();
-    
+
     const url = "https://maps.googleapis.com/maps/api/geocode/json?address=berlin&key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
     fetch(url).then(function(response) {
@@ -117,7 +117,7 @@ addScreenCancelButton.addEventListener("click", (e) => {
 })
 
 // google-maps
-var map;
+let map;
 // Initialize and add the map
 function initMap() {
     // The location of Uluru
