@@ -30,10 +30,10 @@
                 </div>
 
                 <label><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="username" required>
+                <input type="text" placeholder="Enter Username" name="username" value="admina" required>
 
                 <label><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="password" required>
+                <input type="password" placeholder="Enter Password" name="password" value="admina" required>
 
                 <button id="login-button" type="submit">Login</button>
                 <!-- <label>
@@ -88,41 +88,39 @@
     <div id="add-screen">
         <h1 class="add-title">ADD</h1>
 
-        <div id="add-form">
-            <form class="add">
-                <label for="name">*Name:</label>
-                <input type="text" id="name" name="name" required></br>
+        <form id="add-form" class="add">
+            <label for="name">*Name:</label>
+            <input type="text" id="name" name="name" required></br>
 
-                <label for="description">Description:</label>
-                <input type="text" id="description" name="description"></br>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description"></br>
 
-                <label for="street">*Street & House No.:</label>
-                <input type="text" id="street" name="street" required></br>
+            <label for="street">*Street & House No.:</label>
+            <input type="text" id="street" name="street" required></br>
 
-                <label for="postal-code">*Postal Code:</label>
-                <input type="text" id="postal-code" name="postal-code" required></br>
+            <label for="postal-code">*Postal Code:</label>
+            <input type="text" id="postal-code" name="postalCode" required></br>
 
-                <label for="city">*City:</label>
-                <input type="text" id="city" name="city" value="Berlin" required></br>
+            <label for="city">*City:</label>
+            <input type="text" id="city" name="city" value="Berlin" required></br>
 
-                <label for="district">District:</label>
-                <input type="text" id="district" name="district"></br>
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district"></br>
 
-                <label for="latitude">Latitude:</label>
-                <input type="text" id="latitude" name="latitude"></br>
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude"></br>
 
-                <label for="longitude">Longitude:</label>
-                <input type="text" id="longitude" name="longitude"></br>
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude"></br>
 
-                <p>* Diese Felder müssen ausgefüllt werden</p>
+            <p>* Diese Felder müssen ausgefüllt werden</p>
 
-                <div class="buttons">
-                    <button id="add-screen-add-button" class="add-screen-buttons" type="submit">Save</button>
-                    <button id="add-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
-                </div>
-            </form>
-        </div>
-
+            <div class="buttons">
+                <button id="add-screen-add-button" class="add-screen-buttons" type="submit">Save</button>
+                <button id="add-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
+            </div>
+        </form>
+        
         <footer class="footer">
             <a href="">Imprint</a>
             <a href="">Privacy</a>
@@ -147,7 +145,7 @@
             <input type="text" id="street" name="street" value="Herzbergstraße"></br>
 
             <label for="postal-code">Postal Code::</label>
-            <input type="text" id="postal-code" name="postalcode" value="10365"></br>
+            <input type="text" id="postal-code" name="postalCode" value="10365"></br>
 
             <label for="city">City:</label>
             <input type="text" id="city" name="city" value="Berlin"></br>
