@@ -134,6 +134,12 @@ updateButton.addEventListener("click", (e) =>{
     updateForm.reset();
 })
 
+deleteButton.addEventListener("click", (e) => {
+    locationSelect.removeChild(locationSelect.children[currentLocationIndex]);
+    locationList.splice(currentLocationIndex, 1);
+
+    loadMainScreen(currentUser);
+})
 
 detailsScreenCancelButton.addEventListener("click", (e) =>{
     loadMainScreen(currentUser);
