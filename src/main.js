@@ -21,7 +21,7 @@ const updateButton = document.getElementById("update-button");
 const deleteButton = document.getElementById("delete-button");
 const detailsScreenCancelButton = document.getElementById("details-screen-cancel-button");
 
-function Location(name, description, street, postalCode, city, district, lat, long) {
+function Location(name, description, street, postalCode, city, district, lat, long, marker) {
     this.name = name;
     this.description = description;
     this.street = street;
@@ -30,11 +30,12 @@ function Location(name, description, street, postalCode, city, district, lat, lo
     this.district = district;
     this.lat = lat;
     this.long = long;
+    this.marker = marker;
 }
 
 let currentUser;
-
 let currentLocationIndex;
+
 let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
 let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
@@ -63,13 +64,12 @@ loginButton.addEventListener("click", (e) => {
         loginForm.reset();
         //alert("You have successfully logged in as normalo.");
     } else {
-        console.log("LOL");
-        const berlin2 = { lat: 50.531677, lng: 15.381777 };
+        // const berlin2 = { lat: 50.531677, lng: 15.381777 };
 
-        const marker3 = new google.maps.Marker({
-            position: berlin2,
-            map: map,
-        });
+        // const marker3 = new google.maps.Marker({
+        //     position: berlin2,
+        //     map: map,
+        // });
         loginErrorMsg.style.opacity = 1;
         loginForm.reset();
 
@@ -109,8 +109,10 @@ addScreenCancelButton.addEventListener("click", (e) => {
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    let latLng = new google.maps.LatLng(addForm.latitude.value, addForm.longitude.value);
+
     let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-                    addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value);
+                    addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value, addMarker(latLng));
     locationList.push(newLocation);
 
     let newSelectOption = document.createElement("option");
@@ -136,6 +138,7 @@ updateButton.addEventListener("click", (e) =>{
 
 deleteButton.addEventListener("click", (e) => {
     locationSelect.removeChild(locationSelect.children[currentLocationIndex]);
+    locationList[currentLocationIndex].marker.setMap(null);
     locationList.splice(currentLocationIndex, 1);
 
     loadMainScreen(currentUser);
@@ -146,22 +149,22 @@ detailsScreenCancelButton.addEventListener("click", (e) =>{
 })
 
 //Timos Add-button für Map-Pins
-/*addButtonSubmit.addEventListener("click", (e) => {
-    console.log("add button clicked");
-    TestMarker();
+// addButtonSubmit.addEventListener("click", (e) => {
+//     console.log("add button clicked");
+//     TestMarker();
 
-    const url = "https://maps.googleapis.com/maps/api/geocode/json?address=berlin&key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
+//     const url = "https://maps.googleapis.com/maps/api/geocode/json?address=berlin&key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
-    fetch(url).then(function(response) {
-        return response.json();
-      }).then(function(data) {
-        console.log(data);
-      }).catch(function(err) {
-        console.log('Fetch Error :-S', err);
-      });
+//     fetch(url).then(function(response) {
+//         return response.json();
+//       }).then(function(data) {
+//         console.log(data);
+//       }).catch(function(err) {
+//         console.log('Fetch Error :-S', err);
+//       });
     
 
-})*/
+// })
 
 //functions
 function loadLoginScreen() {
@@ -219,6 +222,8 @@ function changeLocation(locationIndex) {
     locationList[locationIndex].district = updateForm.district.value;
     locationList[locationIndex].lat = updateForm.latitude.value;
     locationList[locationIndex].long = updateForm.longitude.value;
+    let latLng = new google.maps.LatLng(updateForm.latitude.value, updateForm.longitude.value);
+    locationList[locationIndex].marker.setPosition(latLng);
 }
 
 function changeUpdateForm(locationIndex) {
@@ -278,6 +283,8 @@ function addMarker(location) {
         position: location,
         map: map
     });
+
+    return marker;
 }
 
 function TestMarker() {
