@@ -39,9 +39,9 @@ let locationList = [];
 let map;
 
 //hard-coded locations
-let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 12, 32);
-let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 20, 32);
-let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 25, 32);
+let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
+let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.831677, 13.381777);
+let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.931677, 13.381777);
 locationList.push(locationOne, locationTwo, locationThree);
 
 //login-screen
@@ -92,7 +92,7 @@ addButton.addEventListener("click", (e) => {
 })
 
 locationSelect.addEventListener("change", (e) =>{
-    let selectedLocation = locationSelect.options[locationSelect.selectedIndex].value;
+    let selectedLocation = locationSelect.options.selectedIndex;
     locationSelect.options[locationSelect.selectedIndex].selected = false;
 
     currentLocationIndex = findLocationInList(selectedLocation);
@@ -242,7 +242,7 @@ function findLocationInList(selectedLocation) {
     let selectedLocationIndex;
 
     for(let i = 0; i < locationList.length; i++){
-        if(locationList[i].name == selectedLocation) {
+        if(i == selectedLocation) {
             selectedLocationIndex = i;
         }
     }
