@@ -26,22 +26,6 @@ const detailsScreenCancelButton = document.getElementById("details-screen-cancel
 
 let map;
 
-let location = {
-    lat: "",
-    lng: ""
-};
-
-function Location(name, description, street, postalCode, city, district, lat, long) {
-    this.name = name;
-    this.description = description;
-    this.street = street;
-    this.postalCode = postalCode;
-    this.city = city;
-    this.district = district;
-    this.lat = lat;
-    this.long = long;
-}
-
 let currentUser;
 
 let currentLocationIndex;
@@ -75,6 +59,17 @@ let locationThree = new Location("Lichtenberg",
 
 let locationList = [];
 locationList.push(locationOne, locationTwo, locationThree);
+
+function Location(name, description, street, postalCode, city, district, lat, long) {
+    this.name = name;
+    this.description = description;
+    this.street = street;
+    this.postalCode = postalCode;
+    this.city = city;
+    this.district = district;
+    this.lat = lat;
+    this.long = long;
+}
 
 //login-screen
 loginButton.addEventListener("click", (e) => {
@@ -175,14 +170,10 @@ detailsScreenCancelButton.addEventListener("click", (e) => {
 
 //Timos Add-button für Map-Pins
 addButtonSubmit.addEventListener("click", (e) => {
-    // console.log("add button clicked");
-    // TestMarker();
-
     convertInputToMarker();
-
-    console.log(address);
-
 })
+
+
 
 //functions
 function loadLoginScreen() {
@@ -272,24 +263,25 @@ function findLocationInList(selectedLocation) {
 //     console.log('Fetch Error :-S', err);
 // });
 
-const makeGetRequest = async (url) => {
-    const response = await fetch(url);
-    return await response.json();
-}
-
-const setLocation = (lat, lng) => {
-    location.lat = lat;
-    location.lng = lng;
+const makeGetRequest = (url) => {
+    return fetch(url).then((response) => response.json());
 }
 
 const inputHasGeoCoordination = () => {
     return latitudeInput.value != "" && longitudeInput.value != "";
 }
 
-const convertInputToMarker = () => {
 
-    let responseType = "json";
+const convertInputToMarker = () => {
+    
+    let location = {
+        lat: Number(""),
+        lng: Number("")
+    };
+    
     let address = "";
+    let responseType = "json";
+
     const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
     if (inputHasGeoCoordination()) {
@@ -298,20 +290,23 @@ const convertInputToMarker = () => {
         console.log(location);
         addMarker(location);
     } else {
-        address = streetInput.value + " "
-            + postalCodeInput.value + " "
-            + cityInput.value;
-
+        address = streetInput.value + ", "
+        + postalCodeInput.value + ", "
+        + cityInput.value;
+        
         const url = "https://maps.googleapis.com/maps/api/geocode/"
-            + responseType
-            + "?address=" + address
-            + "&key=" + API_KEY;
-
-        makeGetRequest(url).then(function (result) {
-            setLocation(result.results[0].geometry.location.lat,
-                result.results[0].geometry.location.lng)
+        + responseType
+        + "?address=" + address
+        + "&key=" + API_KEY;
+        
+        makeGetRequest(url).then((result) => {
+            location.lat = result.results[0].geometry.location.lat;
+            location.lng = result.results[0].geometry.location.lng;
+            console.log(location);
+            console.log(address);
+            console.log(responseType);
+            addMarker(location);
         })
-        addMarker(location);
     }
 
 }
@@ -340,15 +335,8 @@ function initMap() {
         position: berlin,
         map: map,
     });
-}
 
-wp_enqueue_script( 
-    'google-maps', 
-    'https://maps.googleapis.com/maps/api/js?key=AIzaSyAg-GBNbwLWCxiN-UI-0COkr1bgAKpXjQU&callback=initMap',
-    [ 'my-map-script' ],
-    null,
-    true
-);
+}
 
 // Function for adding a marker to the page.
 function addMarker(location) {
