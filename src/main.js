@@ -17,6 +17,7 @@ const postalCodeInput = document.getElementById("postal-code");
 const cityInput = document.getElementById("city");
 const latitudeInput = document.getElementById("latitude");
 const longitudeInput = document.getElementById("longitude");
+const nameInput = document.getElementById("name");
 
 const detailsScreen = document.getElementById("update-delete-screen");
 const updateForm = document.getElementById("update-form");
@@ -271,14 +272,16 @@ const inputHasGeoCoordination = () => {
     return latitudeInput.value != "" && longitudeInput.value != "";
 }
 
+let nameInputString = "";
+let streetInputString = "";
 
 const convertInputToMarker = () => {
-    
+
     let location = {
         lat: Number(""),
         lng: Number("")
     };
-    
+
     let address = "";
     let responseType = "json";
 
@@ -290,15 +293,17 @@ const convertInputToMarker = () => {
         console.log(location);
         addMarker(location);
     } else {
+        nameInputString = nameInput.value;
+        streetInputString = streetInput.value;
         address = streetInput.value + ", "
-        + postalCodeInput.value + ", "
-        + cityInput.value;
-        
+            + postalCodeInput.value + ", "
+            + cityInput.value;
+
         const url = "https://maps.googleapis.com/maps/api/geocode/"
-        + responseType
-        + "?address=" + address
-        + "&key=" + API_KEY;
-        
+            + responseType
+            + "?address=" + address
+            + "&key=" + API_KEY;
+
         makeGetRequest(url).then((result) => {
             location.lat = result.results[0].geometry.location.lat;
             location.lng = result.results[0].geometry.location.lng;
@@ -325,31 +330,32 @@ function initMap() {
         center: uluru
     });
 
-    // The marker, positioned at Uluru
-    const marker = new google.maps.Marker({
-        position: uluru,
-        map: map,
-    });
-
-    const marker2 = new google.maps.Marker({
-        position: berlin,
-        map: map,
-    });
-
 }
 
 // Function for adding a marker to the page.
 function addMarker(location) {
-    marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
         position: location,
-        map: map
+        map: map,
+        title: nameInputString
     });
-}
 
-function TestMarker() {
-    // CentralPark = new google.maps.LatLng(50.7699298, 15.4469157);
-    CentralPark = { lat: + latitudeInput.value, lng: + longitudeInput.value };
-    addMarker(CentralPark);
+    const contentString = `<h1>`
+    + nameInputString 
+    + `</h1><p style= "font-size: 25px;" >Is located at: <b>` 
+    + streetInputString
+    + `</b></p>`;
+    const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: nameInputString + "LOOOOOOOL"
+    });
+
+    marker.addListener("click", () => {
+        infowindow.open({
+            anchor: marker,
+            map,
+        });
+    });
 }
 
 window.initMap = initMap;
