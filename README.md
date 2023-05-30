@@ -9,3 +9,5 @@ https://medium.com/swlh/how-to-create-your-first-login-page-with-html-css-and-ja
 Roboto Fonts:
 https://fonts.google.com/specimen/Roboto
 
+Marker-Info:
+https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
