@@ -12,14 +12,29 @@ const addScreen = document.getElementById("add-screen");
 const addForm = document.getElementById("add-form");
 const addButtonSubmit = document.getElementById("add-screen-add-button");
 const addScreenCancelButton = document.getElementById("add-screen-cancel-button");
+const streetInput = document.getElementById("street");
+const postalCodeInput = document.getElementById("postal-code");
+const cityInput = document.getElementById("city");
 const latitudeInput = document.getElementById("latitude");
 const longitudeInput = document.getElementById("longitude");
+const nameInput = document.getElementById("name");
 
 const detailsScreen = document.getElementById("update-delete-screen");
 const updateForm = document.getElementById("update-form");
 const updateButton = document.getElementById("update-button");
 const deleteButton = document.getElementById("delete-button");
 const detailsScreenCancelButton = document.getElementById("details-screen-cancel-button");
+
+let currentUser;
+let currentLocationIndex;
+let locationList = [];
+let map;
+
+//hard-coded locations
+let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
+let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.831677, 13.381777);
+let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.931677, 13.381777);
+locationList.push(locationOne, locationTwo, locationThree);
 
 function Location(name, description, street, postalCode, city, district, lat, long, marker) {
     this.name = name;
@@ -32,17 +47,6 @@ function Location(name, description, street, postalCode, city, district, lat, lo
     this.long = long;
     this.marker = marker;
 }
-
-let currentUser;
-let currentLocationIndex;
-let locationList = [];
-let map;
-
-//hard-coded locations
-let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
-let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.831677, 13.381777);
-let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.931677, 13.381777);
-locationList.push(locationOne, locationTwo, locationThree);
 
 //login-screen
 loginButton.addEventListener("click", (e) => {
@@ -93,6 +97,7 @@ addButton.addEventListener("click", (e) => {
 
 locationSelect.addEventListener("change", (e) =>{
     let selectedLocation = locationSelect.options.selectedIndex;
+
     locationSelect.options[locationSelect.selectedIndex].selected = false;
 
     currentLocationIndex = findLocationInList(selectedLocation);
@@ -100,7 +105,7 @@ locationSelect.addEventListener("change", (e) =>{
     changeUpdateForm(currentLocationIndex);
 
     loadDetailsScreen(currentUser);
- })
+})
 
 //add-screen
 addScreenCancelButton.addEventListener("click", (e) => {
@@ -114,10 +119,11 @@ addForm.addEventListener("submit", (e) => {
 
     let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
                     addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value, addMarker(newLocationMarkerCoords));
+
     locationList.push(newLocation);
 
     let newSelectOption = document.createElement("option");
-    newSelectOption.innerHTML= addForm.name.value;
+    newSelectOption.innerHTML = addForm.name.value;
 
     locationSelect.appendChild(newSelectOption);
 
@@ -127,7 +133,7 @@ addForm.addEventListener("submit", (e) => {
 })
 
 //update/delete-screen
-updateButton.addEventListener("click", (e) =>{
+updateButton.addEventListener("click", (e) => {
     e.preventDefault();
 
     changeLocation(currentLocationIndex);
@@ -145,27 +151,14 @@ deleteButton.addEventListener("click", (e) => {
     loadMainScreen(currentUser);
 })
 
-detailsScreenCancelButton.addEventListener("click", (e) =>{
+detailsScreenCancelButton.addEventListener("click", (e) => {
     loadMainScreen(currentUser);
 })
 
 //Timos Add-button für Map-Pins
-// addButtonSubmit.addEventListener("click", (e) => {
-//     console.log("add button clicked");
-//     TestMarker();
-
-//     const url = "https://maps.googleapis.com/maps/api/geocode/json?address=berlin&key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
-
-//     fetch(url).then(function(response) {
-//         return response.json();
-//       }).then(function(data) {
-//         console.log(data);
-//       }).catch(function(err) {
-//         console.log('Fetch Error :-S', err);
-//       });
-    
-
-// })
+addButtonSubmit.addEventListener("click", (e) => {
+    convertInputToMarker();
+})
 
 //functions
 function loadLoginScreen() {
@@ -181,10 +174,10 @@ function loadMainScreen(currentUser) {
     detailsScreen.style.display = "none";
     addScreen.style.display = "none";
     document.getElementById("welcome").textContent = "Welcome " + currentUser + ".";
-    if(currentUser == "admina") {
+    if (currentUser == "admina") {
         addButton.style.display = "inline";
     }
-    else if(currentUser == "normalo") {
+    else if (currentUser == "normalo") {
         addButton.style.display = "none";
     }
 }
@@ -194,14 +187,14 @@ function loadDetailsScreen(currentUser) {
     mainScreen.style.display = "none";
     detailsScreen.style.display = "block";
     addScreen.style.display = "none";
-    if(currentUser == "admina") {
+    if (currentUser == "admina") {
         updateButton.style.display = "inline";
         deleteButton.style.display = "inline";
     }
-    else if(currentUser == "normalo") {
+    else if (currentUser == "normalo") {
         updateButton.style.display = "none";
         deleteButton.style.display = "none";
-        for(let i = 0; i < updateForm.length; i++) {
+        for (let i = 0; i < updateForm.length; i++) {
             updateForm.elements[i].readOnly = true;
         }
     }
@@ -249,6 +242,66 @@ function findLocationInList(selectedLocation) {
     return selectedLocationIndex;
 }
 
+// response = fetch(url).then(function (response) {
+//     return response.json();
+// }).then(function (data) {
+//     console.log(data);
+// }).catch(function (err) {
+//     console.log('Fetch Error :-S', err);
+// });
+
+const makeGetRequest = (url) => {
+    return fetch(url).then((response) => response.json());
+}
+
+const inputHasGeoCoordination = () => {
+    return latitudeInput.value != "" && longitudeInput.value != "";
+}
+
+let nameInputString = "";
+let streetInputString = "";
+
+const convertInputToMarker = () => {
+
+    let location = {
+        lat: Number(""),
+        lng: Number("")
+    };
+
+    let address = "";
+    let responseType = "json";
+
+    const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
+
+    if (inputHasGeoCoordination()) {
+        location.lat = Number(latitudeInput.value);
+        location.lng = Number(longitudeInput.value);
+        console.log(location);
+        addMarker(location);
+    } else {
+        nameInputString = nameInput.value;
+        streetInputString = streetInput.value;
+        address = streetInput.value + ", "
+            + postalCodeInput.value + ", "
+            + cityInput.value;
+
+        const url = "https://maps.googleapis.com/maps/api/geocode/"
+            + responseType
+            + "?address=" + address
+            + "&key=" + API_KEY;
+
+        makeGetRequest(url).then((result) => {
+            location.lat = result.results[0].geometry.location.lat;
+            location.lng = result.results[0].geometry.location.lng;
+            console.log(location);
+            console.log(address);
+            console.log(responseType);
+            addMarker(location);
+        })
+    }
+
+}
+
 // google-maps
 // Initialize and add the map
 function initMap() {
@@ -274,22 +327,36 @@ function initMap() {
     locationOne.marker = addMarker(locationOneMarkerCoords);
     locationTwo.marker = addMarker(locationTwoMarkerCoords);
     locationThree.marker = addMarker(locationThreeMarkerCoords);
+
 }
 
 // Function for adding a marker to the page.
 function addMarker(location) {
-    marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
         position: location,
-        map: map
+        map: map,
+        title: nameInputString
     });
 
+    const contentString = `<h1>`
+    + nameInputString 
+    + `</h1><p style= "font-size: 25px;" >Is located at: <b>` 
+    + streetInputString
+    + `</b></p>`;
+    const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: nameInputString + "LOOOOOOOL"
+    });
+  
     return marker;
 }
 
-function TestMarker() {
-    // CentralPark = new google.maps.LatLng(50.7699298, 15.4469157);
-    CentralPark = {lat: + latitudeInput.value, lng: + longitudeInput.value};
-    addMarker(CentralPark);
+    marker.addListener("click", () => {
+        infowindow.open({
+            anchor: marker,
+            map,
+        });
+    });
 }
 
 window.initMap = initMap;
