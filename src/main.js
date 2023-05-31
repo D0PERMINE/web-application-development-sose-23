@@ -31,6 +31,7 @@ let currentUser;
 let currentLocationIndex;
 let locationList = [];
 let map;
+let locationCanBeCreated = false;
 
 //hard-coded locations
 let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
@@ -80,7 +81,7 @@ addButton.addEventListener("click", (e) => {
     loadAddScreen();
 })
 
-locationSelect.addEventListener("change", (e) =>{
+locationSelect.addEventListener("change", (e) => {
     let selectedLocation = locationSelect.options.selectedIndex;
 
     locationSelect.options[locationSelect.selectedIndex].selected = false;
@@ -107,12 +108,15 @@ addButtonSubmit.addEventListener("click", (e) => {
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    let newLocationMarkerCoords = convertInputToMarker()[1];
-    console.log(newLocationMarkerCoords.length);
-    let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-                    addForm.city.value, addForm.district.value, newLocationMarkerCoords.lat, newLocationMarkerCoords.lng);
-    locationList.push(newLocation);
-    
+    // let newLocationMarkerCoords = convertInputToMarker()[1];
+    // console.log(newLocationMarkerCoords.length);
+
+    // let newLocation = new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+    //     addForm.city.value, addForm.district.value, newLocationMarkerCoords.lat, newLocationMarkerCoords.lng);
+    // locationList.push(newLocation);
+
+    locationCanBeCreated = true;
+
     let newSelectOption = document.createElement("option");
     newSelectOption.innerHTML = addForm.name.value;
 
@@ -221,8 +225,8 @@ function changeDetailsScreen(locationIndex) {
 function findLocationInList(selectedLocation) {
     let selectedLocationIndex;
 
-    for(let i = 0; i < locationList.length; i++){
-        if(i == selectedLocation) {
+    for (let i = 0; i < locationList.length; i++) {
+        if (i == selectedLocation) {
             selectedLocationIndex = i;
         }
     }
@@ -241,6 +245,23 @@ function findLocationInList(selectedLocation) {
 const makeGetRequest = (url) => {
     return fetch(url).then((response) => response.json());
 }
+
+// const makeGetRequest = (url) => {
+//     return fetch(url).then((response) => response.json()).then((result) => {
+//         data = result;
+//     })
+// }
+
+const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
+    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
+    console.log("WOW: " + newLocation.name);
+    console.log("LOL XD: " + newLocation.lat);
+    locationList.push(newLocation);
+}
+
+// const setNewLocationIsCalled = () => {
+//     return 
+// }
 
 const inputHasCoordinatesAndIsANumber = () => {
     return (latitudeInput.value != "" && !isNaN(latitudeInput.value)) && (longitudeInput.value != "" && !isNaN(longitudeInput.value));
@@ -276,17 +297,29 @@ const convertInputToMarker = () => {
             + "?address=" + address
             + "&key=" + API_KEY;
 
+            console.log(url);
         makeGetRequest(url).then((result) => {
-            if(result.results[0].address_components.length <= 4) {
+            if (result.results[0].address_components.length <= 4) {
                 alert("Please enter a valid address or valid coordinates.");
             }
             else {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
-                addMarker(location);
                 console.log(result);
+                // callSetNewLocation();
+                if (locationCanBeCreated) {
+                    setNewLocation(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+                        addForm.city.value, addForm.district.value, location.lat, location.lng);
+                        locationCanBeCreated = false;
+                }
+                return addMarker(location);
+
+                // let array1 = [addMarker(location), location];
+                // console.log("lat und lng: " + array1[1].lat, array1[1].lng);
+                // return array1;
             }
-        }).catch((error) => alert("Address entered is not a real location"));
+        })
+        // .catch((error) => alert("Address entered is not a real location1111111"));
     }
 }
 
@@ -327,15 +360,15 @@ function addMarker(location) {
     });
 
     const contentString = `<h1>`
-    + nameInputString 
-    + `</h1><p style= "font-size: 25px;" >Is located at: <b>` 
-    + streetInputString
-    + `</b></p>`;
+        + nameInputString
+        + `</h1><p style= "font-size: 25px;" >Is located at: <b>`
+        + streetInputString
+        + `</b></p>`;
     const infowindow = new google.maps.InfoWindow({
         content: contentString,
         ariaLabel: nameInputString + "LOOOOOOOL"
     });
-  
+
     marker.addListener("click", () => {
         infowindow.open({
             anchor: marker,
