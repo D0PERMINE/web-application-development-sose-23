@@ -31,7 +31,7 @@ let currentUser;
 let currentLocationIndex;
 let locationList = [];
 let map;
-let wasSuccess;
+let wasSuccess = 1;
 
 //hard-coded locations
 let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
@@ -101,9 +101,9 @@ addScreenCancelButton.addEventListener("click", (e) => {
 })
 
 //Timos Add-button für Map-Pins
-addButtonSubmit.addEventListener("click", (e) => {
-    convertInputToMarker();
-})
+// addButtonSubmit.addEventListener("click", (e) => {
+//     convertInputToMarker();
+// })
 
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -112,17 +112,22 @@ addForm.addEventListener("submit", (e) => {
                     addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value);
     locationList.push(newLocation);
     
-    convertInputToMarker();
-    
-    if(wasSuccess == 1) {
-        let newSelectOption = document.createElement("option");
-        newSelectOption.innerHTML = addForm.name.value;
+    let newSelectOption = document.createElement("option");
+    newSelectOption.innerHTML = addForm.name.value;
 
-        locationSelect.appendChild(newSelectOption);
+    locationSelect.appendChild(newSelectOption);
 
-        loadMainScreen(currentUser);
-        addForm.reset();
-    }
+    loadMainScreen(currentUser);
+    addForm.reset();
+    // if(wasSuccess == 1) {
+    //     let newSelectOption = document.createElement("option");
+    //     newSelectOption.innerHTML = addForm.name.value;
+
+    //     locationSelect.appendChild(newSelectOption);
+
+    //     loadMainScreen(currentUser);
+    //     addForm.reset();
+    // }
 })
 
 //details-screen
@@ -140,6 +145,7 @@ deleteButton.addEventListener("click", (e) => {
     console.log(locationList[currentLocationIndex].marker);
     locationSelect.removeChild(locationSelect.children[currentLocationIndex]);
     locationList[currentLocationIndex].marker.setMap(null);
+    locationList[currentLocationIndex].marker = [];
     locationList.splice(currentLocationIndex, 1);
 
     loadMainScreen(currentUser);
@@ -266,8 +272,9 @@ const convertInputToMarker = () => {
         nameInputString = nameInput.value;
         location.lat = Number(latitudeInput.value);
         location.lng = Number(longitudeInput.value);
-        wasSuccess = 1;
-        addMarker(location);
+        //wasSuccess = 1;
+        locationList[locationList.length-1].marker = addMarker(location);
+        return Promise.resolve("Location Added");
     } else {
         nameInputString = nameInput.value;
         streetInputString = streetInput.value;
@@ -282,14 +289,16 @@ const convertInputToMarker = () => {
 
         makeGetRequest(url).then((result) => {
             if(result.results[0].address_components.length <= 4) {
+                //return Promise.resolve("Please enter a valid address or valid coordinates.");
                 alert("Please enter a valid address or valid coordinates.");
-                wasSuccess = 0;
+                //wasSuccess = 0;
             }
             else {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
-                wasSuccess = 1;
-                addMarker(location);
+                //wasSuccess = 1;
+                locationList[locationList.length-1].marker = addMarker(location);
+                //return Promise.resolve("Location Added");
             }
         }).catch((error) => alert("Address entered is not a real location"));
     }
@@ -312,10 +321,10 @@ function initMap() {
     });
 
     // The marker, positioned at Berlin
-    const marker2 = new google.maps.Marker({
-        position: berlin,
-        map: map,
-    });
+    // const marker2 = new google.maps.Marker({
+    //     position: berlin,
+    //     map: map,
+    // });
 
     nameInputString = locationOne.name;
     streetInputString = locationOne.street;
@@ -326,7 +335,6 @@ function initMap() {
     nameInputString = locationThree.name;
     streetInputString = locationThree.street;
     locationThree.marker = addMarker(locationThreeMarkerCoords);
-
 }
 
 // Function for adding a marker to the page.
@@ -336,7 +344,6 @@ function addMarker(location) {
         map: map,
         title: nameInputString
     });
-    locationList[locationList.length - 1].marker = marker;
     const contentString = `<h1>`
     + nameInputString 
     + `</h1><p style= "font-size: 25px;" >Is located at: <b>` 
