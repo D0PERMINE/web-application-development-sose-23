@@ -349,7 +349,6 @@ function addMarker(location) {
     });
   
     return marker;
-}
 
     marker.addListener("click", () => {
         infowindow.open({
