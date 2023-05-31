@@ -18,8 +18,10 @@ const cityInput = document.getElementById("city");
 const latitudeInput = document.getElementById("latitude");
 const longitudeInput = document.getElementById("longitude");
 const nameInput = document.getElementById("name");
+const districtInput = document.getElementById("district");
+const descriptionInput = document.getElementById("description");
 
-const detailsScreen = document.getElementById("update-delete-screen");
+const detailsScreen = document.getElementById("details-screen");
 const updateForm = document.getElementById("update-form");
 const updateButton = document.getElementById("update-button");
 const deleteButton = document.getElementById("delete-button");
@@ -55,32 +57,16 @@ loginButton.addEventListener("click", (e) => {
     const password = loginForm.password.value;
 
     if (username === "admina" && password === "admina") {
-        // location.reload();
         currentUser = "admina";
         loadMainScreen(currentUser);
-
         loginForm.reset();
-        //alert("You have successfully logged in as admina.");
     } else if (username === "normalo" && password === "normalo") {
-        // location.reload();
         currentUser = "normalo";
         loadMainScreen(currentUser);
-
         loginForm.reset();
-        //alert("You have successfully logged in as normalo.");
     } else {
-        // const berlin2 = { lat: 50.531677, lng: 15.381777 };
-
-        // const marker3 = new google.maps.Marker({
-        //     position: berlin2,
-        //     map: map,
-        // });
         loginErrorMsg.style.opacity = 1;
         loginForm.reset();
-
-
-        // loginErrorMsg.style.display = "block";
-        // loginErrorMsg.style.visibility = "visible";
     }
 })
 
@@ -88,7 +74,6 @@ loginButton.addEventListener("click", (e) => {
 logoutButton.addEventListener("click", (e) => {
     currentUser = undefined;
     loadLoginScreen();
-    //alert("Logged out successfully.");
 })
 
 addButton.addEventListener("click", (e) => {
@@ -102,7 +87,7 @@ locationSelect.addEventListener("change", (e) =>{
 
     currentLocationIndex = findLocationInList(selectedLocation);
 
-    changeUpdateForm(currentLocationIndex);
+    changeDetailsScreen(currentLocationIndex);
 
     loadDetailsScreen(currentUser);
 })
@@ -110,29 +95,64 @@ locationSelect.addEventListener("change", (e) =>{
 //add-screen
 addScreenCancelButton.addEventListener("click", (e) => {
     loadMainScreen(currentUser);
+
+    addForm.reset();
 })
 
+//Timos Add-button für Map-Pins
+// addButtonSubmit.addEventListener("click", (e) => {
+//     let wasSuccessful = convertInputToMarker();
+    
+//     if(wasSuccessful) {
+//         let newSelectOption = document.createElement("option");
+//         newSelectOption.innerHTML = addForm.name.value;
+
+//         locationSelect.appendChild(newSelectOption);
+//     }
+
+//     loadMainScreen(currentUser);
+
+//     addForm.reset();
+// })
+
 addForm.addEventListener("submit", (e) => {
+    // e.preventDefault();
+
+    // let newLocationMarkerCoords = convertInputToMarker()[1];
+    // console.log(newLocationMarkerCoords.length);
+    // let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+    //                 addForm.city.value, addForm.district.value, newLocationMarkerCoords.lat, newLocationMarkerCoords.lng);
+    // locationList.push(newLocation);
+    
+    // let newSelectOption = document.createElement("option");
+    // newSelectOption.innerHTML = addForm.name.value;
+
+    // locationSelect.appendChild(newSelectOption);
+
+    // loadMainScreen(currentUser);
+
+    // addForm.reset();
+    
     e.preventDefault();
 
-    let newLocationMarkerCoords = new google.maps.LatLng(addForm.latitude.value, addForm.longitude.value);
+    // let wasSuccessful = true;
+    // wasSuccessful = convertInputToMarker();
+    // //wasSuccessful = true;
+    //console.log(wasSuccessful);
+    if(convertInputToMarker) {
+        console.log("lOOOLLL?dsgkjhgbunasdujtgbasm")
+        let newSelectOption = document.createElement("option");
+        newSelectOption.innerHTML = addForm.name.value;
 
-    let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-                    addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value, addMarker(newLocationMarkerCoords));
-
-    locationList.push(newLocation);
-
-    let newSelectOption = document.createElement("option");
-    newSelectOption.innerHTML = addForm.name.value;
-
-    locationSelect.appendChild(newSelectOption);
+        locationSelect.appendChild(newSelectOption);
+    }
 
     loadMainScreen(currentUser);
 
     addForm.reset();
 })
 
-//update/delete-screen
+//details-screen
 updateButton.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -153,11 +173,6 @@ deleteButton.addEventListener("click", (e) => {
 
 detailsScreenCancelButton.addEventListener("click", (e) => {
     loadMainScreen(currentUser);
-})
-
-//Timos Add-button für Map-Pins
-addButtonSubmit.addEventListener("click", (e) => {
-    convertInputToMarker();
 })
 
 //functions
@@ -182,6 +197,13 @@ function loadMainScreen(currentUser) {
     }
 }
 
+function loadAddScreen() {
+    loginScreen.style.display = "none";
+    mainScreen.style.display = "none";
+    detailsScreen.style.display = "none";
+    addScreen.style.display = "block";
+}
+
 function loadDetailsScreen(currentUser) {
     loginScreen.style.display = "none";
     mainScreen.style.display = "none";
@@ -200,13 +222,6 @@ function loadDetailsScreen(currentUser) {
     }
 }
 
-function loadAddScreen() {
-    loginScreen.style.display = "none";
-    mainScreen.style.display = "none";
-    detailsScreen.style.display = "none";
-    addScreen.style.display = "block";
-}
-
 function changeLocation(locationIndex) {
     locationList[locationIndex].name = updateForm.name.value;
     locationList[locationIndex].description = updateForm.description.value;
@@ -220,7 +235,8 @@ function changeLocation(locationIndex) {
     locationList[locationIndex].marker.setPosition(updatedLocationMarkerCoords);
 }
 
-function changeUpdateForm(locationIndex) {
+function changeDetailsScreen(locationIndex) {
+    console.log(locationList[currentLocationIndex]);
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
     updateForm.street.value = locationList[locationIndex].street;
@@ -239,6 +255,7 @@ function findLocationInList(selectedLocation) {
             selectedLocationIndex = i;
         }
     }
+
     return selectedLocationIndex;
 }
 
@@ -254,30 +271,35 @@ const makeGetRequest = (url) => {
     return fetch(url).then((response) => response.json());
 }
 
-const inputHasGeoCoordination = () => {
-    return latitudeInput.value != "" && longitudeInput.value != "";
+const inputHasCoordinatesAndIsANumber = () => {
+    return (latitudeInput.value != "" && !isNaN(latitudeInput.value)) && (longitudeInput.value != "" && !isNaN(longitudeInput.value));
 }
 
 let nameInputString = "";
 let streetInputString = "";
 
 const convertInputToMarker = () => {
-
     let location = {
         lat: Number(""),
         lng: Number("")
     };
+
+    let newLocation =  new Location(nameInput.value, descriptionInput.value, streetInput.value, postalCodeInput.value,
+        cityInput.value, districtInput.value);
 
     let address = "";
     let responseType = "json";
 
     const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
-    if (inputHasGeoCoordination()) {
+    if (inputHasCoordinatesAndIsANumber()) {
         location.lat = Number(latitudeInput.value);
         location.lng = Number(longitudeInput.value);
-        console.log(location);
-        addMarker(location);
+        newLocation.marker = addMarker(location);
+        newLocation.lat = location.lat;
+        newLocation.long = location.lng;
+        locationList.push(newLocation);
+        return true;
     } else {
         nameInputString = nameInput.value;
         streetInputString = streetInput.value;
@@ -291,15 +313,24 @@ const convertInputToMarker = () => {
             + "&key=" + API_KEY;
 
         makeGetRequest(url).then((result) => {
-            location.lat = result.results[0].geometry.location.lat;
-            location.lng = result.results[0].geometry.location.lng;
-            console.log(location);
-            console.log(address);
-            console.log(responseType);
-            addMarker(location);
-        })
+            if(result.results[0].address_components.length <= 4) {
+                alert("Please enter a valid address or valid coordinates.");
+                return false;
+            }
+            else {
+                location.lat = result.results[0].geometry.location.lat;
+                location.lng = result.results[0].geometry.location.lng;
+                newLocation.marker = addMarker(location);
+                newLocation.lat = location.lat;
+                newLocation.long = location.lng;
+                //newLocation.postalCode = result.results[0].address_components[7].long_name;
+                console.log(result);
+                locationList.push(newLocation);
+                return true;
+            }
+        }).catch((error) => alert("Address entered is not a real location"));
     }
-
+    return false;
 }
 
 // google-maps

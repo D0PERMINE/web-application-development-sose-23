@@ -109,14 +109,14 @@
             <label for="description">Description:</label>
             <input type="text" id="description" name="description"></br>
 
-            <label for="street">*Street & House No.:</label>
-            <input type="text" id="street" name="street" required></br>
+            <label for="street">Street & House No.:</label>
+            <input type="text" id="street" name="street"></br>
 
-            <label for="postal-code">*Postal Code:</label>
-            <input type="text" id="postal-code" name="postalCode" required></br>
+            <label for="postal-code">Postal Code:</label>
+            <input type="text" id="postal-code" name="postalCode"></br>
 
-            <label for="city">*City:</label>
-            <input type="text" id="city" name="city" value="Berlin" required></br>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" value="Berlin"></br>
 
             <label for="district">District:</label>
             <input type="text" id="district" name="district"></br>
@@ -129,10 +129,8 @@
 
             <p>* Diese Felder müssen ausgefüllt werden</p>
             <!-- submit zu button ändern falls map pins resettet werden-->
-            <div class="buttons">
-                <button id="add-screen-add-button" class="add-screen-buttons" type="submit">Save</button>
-                <button id="add-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
-            </div>
+            <button id="add-screen-add-button" class="small-button" type="submit">Save</button>
+            <button id="add-screen-cancel-button" class="small-button" type="button">Cancel</button>
         </form>
         
         <footer class="footer">
@@ -141,10 +139,9 @@
         </footer>
     </div>
 
-    <div id="update-delete-screen">
-        <h1 class="update-title">UPDATE/DELETE</h1>
+    <div id="details-screen">
+        <h1 class="details-title">LOCATION-DETAILS</h1>
 
-        
         <form id="update-form" class="update">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="Fahrradweg Herzbergstraße"></br>
@@ -162,7 +159,7 @@
             <input type="text" id="postal-code" name="postalCode" value="10365"></br>
 
             <label for="city">City:</label>
-            <input type="text" id="city" name="city" value="Berlin"></br>
+            <input type="text" id="city" name="city" value="Berlin" readonly></br>
 
             <label for="district">District:</label>
             <input type="text" id="district" name="district" value="Lichtenberg"></br>
@@ -173,11 +170,9 @@
             <label for="longitude">Longitude:</label>
             <input type="text" id="longitude" name="longitude" value="13,493836"></br>
 
-            <div class="buttons">
-                <button id="update-button" class="add-screen-buttons" type="submit">Update</button>
-                <button id="delete-button" class="add-screen-buttons" type="button">Delete</button>
-                <button id="details-screen-cancel-button" class="add-screen-buttons" type="button">Cancel</button>
-            </div>
+            <button id="update-button" class="small-button" type="submit">Update</button>
+            <button id="delete-button" class="small-button" type="button">Delete</button>
+            <button id="details-screen-cancel-button" class="small-button" type="button">Cancel</button>
         </form>
 
         <footer class="footer">
