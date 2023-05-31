@@ -25,43 +25,18 @@ const updateButton = document.getElementById("update-button");
 const deleteButton = document.getElementById("delete-button");
 const detailsScreenCancelButton = document.getElementById("details-screen-cancel-button");
 
+let currentUser;
+let currentLocationIndex;
+let locationList = [];
 let map;
 
-let currentUser;
-
-let currentLocationIndex;
-
-let locationOne = new Location("Friedrichshain-Kreuzberg",
-    "desatstat",
-    "staswuek",
-    12345,
-    "Berlin",
-    "sdtr",
-    12,
-    32);
-
-let locationTwo = new Location("Neukölln",
-    "desatstat",
-    "staswuek",
-    12345,
-    "Berlin",
-    "sdtr",
-    12,
-    32);
-
-let locationThree = new Location("Lichtenberg",
-    "desatstat",
-    "staswuek",
-    12345,
-    "Berlin",
-    "sdtr",
-    12,
-    32);
-
-let locationList = [];
+//hard-coded locations
+let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
+let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.831677, 13.381777);
+let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.931677, 13.381777);
 locationList.push(locationOne, locationTwo, locationThree);
 
-function Location(name, description, street, postalCode, city, district, lat, long) {
+function Location(name, description, street, postalCode, city, district, lat, long, marker) {
     this.name = name;
     this.description = description;
     this.street = street;
@@ -70,6 +45,7 @@ function Location(name, description, street, postalCode, city, district, lat, lo
     this.district = district;
     this.lat = lat;
     this.long = long;
+    this.marker = marker;
 }
 
 //login-screen
@@ -93,13 +69,12 @@ loginButton.addEventListener("click", (e) => {
         loginForm.reset();
         //alert("You have successfully logged in as normalo.");
     } else {
-        console.log("LOL");
-        const berlin2 = { lat: 50.531677, lng: 15.381777 };
+        // const berlin2 = { lat: 50.531677, lng: 15.381777 };
 
-        const marker3 = new google.maps.Marker({
-            position: berlin2,
-            map: map,
-        });
+        // const marker3 = new google.maps.Marker({
+        //     position: berlin2,
+        //     map: map,
+        // });
         loginErrorMsg.style.opacity = 1;
         loginForm.reset();
 
@@ -120,8 +95,9 @@ addButton.addEventListener("click", (e) => {
     loadAddScreen();
 })
 
-locationSelect.addEventListener("change", (e) => {
-    let selectedLocation = locationSelect.options[locationSelect.selectedIndex].value;
+locationSelect.addEventListener("change", (e) =>{
+    let selectedLocation = locationSelect.options.selectedIndex;
+
     locationSelect.options[locationSelect.selectedIndex].selected = false;
 
     currentLocationIndex = findLocationInList(selectedLocation);
@@ -139,8 +115,11 @@ addScreenCancelButton.addEventListener("click", (e) => {
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    let newLocation = new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-        addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value);
+    let newLocationMarkerCoords = new google.maps.LatLng(addForm.latitude.value, addForm.longitude.value);
+
+    let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+                    addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value, addMarker(newLocationMarkerCoords));
+
     locationList.push(newLocation);
 
     let newSelectOption = document.createElement("option");
@@ -164,6 +143,13 @@ updateButton.addEventListener("click", (e) => {
     updateForm.reset();
 })
 
+deleteButton.addEventListener("click", (e) => {
+    locationSelect.removeChild(locationSelect.children[currentLocationIndex]);
+    locationList[currentLocationIndex].marker.setMap(null);
+    locationList.splice(currentLocationIndex, 1);
+
+    loadMainScreen(currentUser);
+})
 
 detailsScreenCancelButton.addEventListener("click", (e) => {
     loadMainScreen(currentUser);
@@ -173,8 +159,6 @@ detailsScreenCancelButton.addEventListener("click", (e) => {
 addButtonSubmit.addEventListener("click", (e) => {
     convertInputToMarker();
 })
-
-
 
 //functions
 function loadLoginScreen() {
@@ -232,6 +216,8 @@ function changeLocation(locationIndex) {
     locationList[locationIndex].district = updateForm.district.value;
     locationList[locationIndex].lat = updateForm.latitude.value;
     locationList[locationIndex].long = updateForm.longitude.value;
+    let updatedLocationMarkerCoords = new google.maps.LatLng(updateForm.latitude.value, updateForm.longitude.value);
+    locationList[locationIndex].marker.setPosition(updatedLocationMarkerCoords);
 }
 
 function changeUpdateForm(locationIndex) {
@@ -248,8 +234,8 @@ function changeUpdateForm(locationIndex) {
 function findLocationInList(selectedLocation) {
     let selectedLocationIndex;
 
-    for (let i = 0; i < locationList.length; i++) {
-        if (locationList[i].name == selectedLocation) {
+    for(let i = 0; i < locationList.length; i++){
+        if(i == selectedLocation) {
             selectedLocationIndex = i;
         }
     }
@@ -317,18 +303,30 @@ const convertInputToMarker = () => {
 }
 
 // google-maps
-
 // Initialize and add the map
 function initMap() {
-    // The location of Uluru
-    const uluru = { lat: 52.531677, lng: 13.381777 };
-    const berlin = { lat: 51.531677, lng: 14.381777 };
+    // The coordinates of Berlin
+    const berlin = { lat: 52.531677, lng: 13.381777 };
 
-    // The map, centered at Uluru
+    const locationOneMarkerCoords = { lat: 52.731677, lng: 13.381777 };
+    const locationTwoMarkerCoords = { lat: 52.831677, lng: 13.381777 };
+    const locationThreeMarkerCoords = { lat: 52.931677, lng: 13.381777 };
+
+    // The map, centered around Berlin
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
-        center: uluru
+        center: berlin
     });
+
+    // The marker, positioned at Berlin
+    const marker2 = new google.maps.Marker({
+        position: berlin,
+        map: map,
+    });
+
+    locationOne.marker = addMarker(locationOneMarkerCoords);
+    locationTwo.marker = addMarker(locationTwoMarkerCoords);
+    locationThree.marker = addMarker(locationThreeMarkerCoords);
 
 }
 
@@ -349,6 +347,9 @@ function addMarker(location) {
         content: contentString,
         ariaLabel: nameInputString + "LOOOOOOOL"
     });
+  
+    return marker;
+}
 
     marker.addListener("click", () => {
         infowindow.open({
