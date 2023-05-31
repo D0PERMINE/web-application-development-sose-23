@@ -198,6 +198,11 @@ button:hover {
     color: black;
 }
 
+.add-notif {
+    font-size: 20px;
+    text-align: center;
+}
+
 #add-form {
     margin: 0px 30% 0px 30%;
     padding: 10px;

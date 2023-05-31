@@ -31,6 +31,7 @@ let currentUser;
 let currentLocationIndex;
 let locationList = [];
 let map;
+let wasSuccess;
 
 //hard-coded locations
 let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
@@ -107,20 +108,21 @@ addButtonSubmit.addEventListener("click", (e) => {
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    let newLocationMarkerCoords = convertInputToMarker()[1];
-    console.log(newLocationMarkerCoords.length);
     let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-                    addForm.city.value, addForm.district.value, newLocationMarkerCoords.lat, newLocationMarkerCoords.lng);
+                    addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value);
     locationList.push(newLocation);
     
-    let newSelectOption = document.createElement("option");
-    newSelectOption.innerHTML = addForm.name.value;
+    convertInputToMarker();
+    
+    if(wasSuccess == 1) {
+        let newSelectOption = document.createElement("option");
+        newSelectOption.innerHTML = addForm.name.value;
 
-    locationSelect.appendChild(newSelectOption);
+        locationSelect.appendChild(newSelectOption);
 
-    loadMainScreen(currentUser);
-
-    addForm.reset();
+        loadMainScreen(currentUser);
+        addForm.reset();
+    }
 })
 
 //details-screen
@@ -135,6 +137,7 @@ updateButton.addEventListener("click", (e) => {
 })
 
 deleteButton.addEventListener("click", (e) => {
+    console.log(locationList[currentLocationIndex].marker);
     locationSelect.removeChild(locationSelect.children[currentLocationIndex]);
     locationList[currentLocationIndex].marker.setMap(null);
     locationList.splice(currentLocationIndex, 1);
@@ -207,7 +210,6 @@ function changeLocation(locationIndex) {
 }
 
 function changeDetailsScreen(locationIndex) {
-    console.log(locationList[currentLocationIndex]);
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
     updateForm.street.value = locationList[locationIndex].street;
@@ -261,8 +263,10 @@ const convertInputToMarker = () => {
     const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
     if (inputHasCoordinatesAndIsANumber()) {
+        nameInputString = nameInput.value;
         location.lat = Number(latitudeInput.value);
         location.lng = Number(longitudeInput.value);
+        wasSuccess = 1;
         addMarker(location);
     } else {
         nameInputString = nameInput.value;
@@ -279,12 +283,13 @@ const convertInputToMarker = () => {
         makeGetRequest(url).then((result) => {
             if(result.results[0].address_components.length <= 4) {
                 alert("Please enter a valid address or valid coordinates.");
+                wasSuccess = 0;
             }
             else {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
+                wasSuccess = 1;
                 addMarker(location);
-                console.log(result);
             }
         }).catch((error) => alert("Address entered is not a real location"));
     }
@@ -312,8 +317,14 @@ function initMap() {
         map: map,
     });
 
+    nameInputString = locationOne.name;
+    streetInputString = locationOne.street;
     locationOne.marker = addMarker(locationOneMarkerCoords);
+    nameInputString = locationTwo.name;
+    streetInputString = locationTwo.street;
     locationTwo.marker = addMarker(locationTwoMarkerCoords);
+    nameInputString = locationThree.name;
+    streetInputString = locationThree.street;
     locationThree.marker = addMarker(locationThreeMarkerCoords);
 
 }
@@ -325,7 +336,7 @@ function addMarker(location) {
         map: map,
         title: nameInputString
     });
-
+    locationList[locationList.length - 1].marker = marker;
     const contentString = `<h1>`
     + nameInputString 
     + `</h1><p style= "font-size: 25px;" >Is located at: <b>` 
