@@ -100,52 +100,23 @@ addScreenCancelButton.addEventListener("click", (e) => {
 })
 
 //Timos Add-button für Map-Pins
-// addButtonSubmit.addEventListener("click", (e) => {
-//     let wasSuccessful = convertInputToMarker();
-    
-//     if(wasSuccessful) {
-//         let newSelectOption = document.createElement("option");
-//         newSelectOption.innerHTML = addForm.name.value;
-
-//         locationSelect.appendChild(newSelectOption);
-//     }
-
-//     loadMainScreen(currentUser);
-
-//     addForm.reset();
-// })
+addButtonSubmit.addEventListener("click", (e) => {
+    convertInputToMarker();
+})
 
 addForm.addEventListener("submit", (e) => {
-    // e.preventDefault();
-
-    // let newLocationMarkerCoords = convertInputToMarker()[1];
-    // console.log(newLocationMarkerCoords.length);
-    // let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-    //                 addForm.city.value, addForm.district.value, newLocationMarkerCoords.lat, newLocationMarkerCoords.lng);
-    // locationList.push(newLocation);
-    
-    // let newSelectOption = document.createElement("option");
-    // newSelectOption.innerHTML = addForm.name.value;
-
-    // locationSelect.appendChild(newSelectOption);
-
-    // loadMainScreen(currentUser);
-
-    // addForm.reset();
-    
     e.preventDefault();
 
-    // let wasSuccessful = true;
-    // wasSuccessful = convertInputToMarker();
-    // //wasSuccessful = true;
-    //console.log(wasSuccessful);
-    if(convertInputToMarker) {
-        console.log("lOOOLLL?dsgkjhgbunasdujtgbasm")
-        let newSelectOption = document.createElement("option");
-        newSelectOption.innerHTML = addForm.name.value;
+    let newLocationMarkerCoords = convertInputToMarker()[1];
+    console.log(newLocationMarkerCoords.length);
+    let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+                    addForm.city.value, addForm.district.value, newLocationMarkerCoords.lat, newLocationMarkerCoords.lng);
+    locationList.push(newLocation);
+    
+    let newSelectOption = document.createElement("option");
+    newSelectOption.innerHTML = addForm.name.value;
 
-        locationSelect.appendChild(newSelectOption);
-    }
+    locationSelect.appendChild(newSelectOption);
 
     loadMainScreen(currentUser);
 
@@ -284,9 +255,6 @@ const convertInputToMarker = () => {
         lng: Number("")
     };
 
-    let newLocation =  new Location(nameInput.value, descriptionInput.value, streetInput.value, postalCodeInput.value,
-        cityInput.value, districtInput.value);
-
     let address = "";
     let responseType = "json";
 
@@ -295,11 +263,7 @@ const convertInputToMarker = () => {
     if (inputHasCoordinatesAndIsANumber()) {
         location.lat = Number(latitudeInput.value);
         location.lng = Number(longitudeInput.value);
-        newLocation.marker = addMarker(location);
-        newLocation.lat = location.lat;
-        newLocation.long = location.lng;
-        locationList.push(newLocation);
-        return true;
+        addMarker(location);
     } else {
         nameInputString = nameInput.value;
         streetInputString = streetInput.value;
@@ -315,22 +279,15 @@ const convertInputToMarker = () => {
         makeGetRequest(url).then((result) => {
             if(result.results[0].address_components.length <= 4) {
                 alert("Please enter a valid address or valid coordinates.");
-                return false;
             }
             else {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
-                newLocation.marker = addMarker(location);
-                newLocation.lat = location.lat;
-                newLocation.long = location.lng;
-                //newLocation.postalCode = result.results[0].address_components[7].long_name;
+                addMarker(location);
                 console.log(result);
-                locationList.push(newLocation);
-                return true;
             }
         }).catch((error) => alert("Address entered is not a real location"));
     }
-    return false;
 }
 
 // google-maps
