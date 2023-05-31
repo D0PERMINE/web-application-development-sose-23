@@ -348,14 +348,14 @@ function addMarker(location) {
         ariaLabel: nameInputString + "LOOOOOOOL"
     });
   
-    return marker;
-
     marker.addListener("click", () => {
         infowindow.open({
             anchor: marker,
             map,
         });
     });
+
+    return marker;
 }
 
 window.initMap = initMap;
