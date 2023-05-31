@@ -63,9 +63,9 @@
         <div class="main-map-container">
             <div class="text">
                 <select id="locations-select" size="8">
-                    <option>Friedrichshain-Kreuzberg</option>
-                    <option>Neukölln</option>
-                    <option>Lichtenberg</option>
+                    <option>Wilhelminenhofstraße</option>
+                    <option>Goethestraße</option>
+                    <option>Herzbergstraße</option>
                 </select>
             </div>
 
@@ -106,9 +106,11 @@
         <form id="add-form" class="add">
             <label for="name">*Name:</label>
             <input type="text" id="name" name="name" required></br>
-
-            <label for="description">Description:</label>
-            <input type="text" id="description" name="description"></br>
+            <div class="form-field">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" cols="26"></textarea>
+            </div>
+            <!-- <input type="text" id="description" name="description"></br> -->
 
             <label for="street">Street & House No.:</label>
             <input type="text" id="street" name="street"></br>
@@ -147,11 +149,13 @@
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="Fahrradweg Herzbergstraße"></br>
 
-            <label for="description">Description:</label>
-            <input type="text" id="description" name="description" value="Auf der Herzbergstraße
-                teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand
-                als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und 
-                den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst."></br>
+            <div class="form-field">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" cols="26" value="Auf der Herzbergstraße
+                    teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand
+                    als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und 
+                    den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst."></textarea></br>
+            </div>
 
             <label for="street">Street:</label>
             <input type="text" id="street" name="street" value="Herzbergstraße"></br>

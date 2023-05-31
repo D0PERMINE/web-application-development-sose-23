@@ -31,12 +31,13 @@ let currentUser;
 let currentLocationIndex;
 let locationList = [];
 let map;
-let wasSuccess = 1;
 
 //hard-coded locations
-let locationOne = new Location("Friedrichshain-Kreuzberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.731677, 13.381777);
-let locationTwo = new Location("Neukölln", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.831677, 13.381777);
-let locationThree = new Location("Lichtenberg", "desatstat", "staswuek", 12345, "Berlin", "sdtr", 52.931677, 13.381777);
+let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
+let locationTwo = new Location("Goethestraße", "Backsteinpflaster und Autos die auf beiden Seiten parken behindern Fahrradmobilität",
+"Goethestraße", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
+let locationThree = new Location("Herzbergstraße", "Auf der Herzbergstraße teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst.",
+ "Herzbergstraße", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
 locationList.push(locationOne, locationTwo, locationThree);
 
 function Location(name, description, street, postalCode, city, district, lat, long, marker) {
@@ -101,9 +102,9 @@ addScreenCancelButton.addEventListener("click", (e) => {
 })
 
 //Timos Add-button für Map-Pins
-// addButtonSubmit.addEventListener("click", (e) => {
-//     convertInputToMarker();
-// })
+addButtonSubmit.addEventListener("click", (e) => {
+    convertInputToMarker();
+})
 
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -119,15 +120,6 @@ addForm.addEventListener("submit", (e) => {
 
     loadMainScreen(currentUser);
     addForm.reset();
-    // if(wasSuccess == 1) {
-    //     let newSelectOption = document.createElement("option");
-    //     newSelectOption.innerHTML = addForm.name.value;
-
-    //     locationSelect.appendChild(newSelectOption);
-
-    //     loadMainScreen(currentUser);
-    //     addForm.reset();
-    // }
 })
 
 //details-screen
@@ -289,16 +281,12 @@ const convertInputToMarker = () => {
 
         makeGetRequest(url).then((result) => {
             if(result.results[0].address_components.length <= 4) {
-                //return Promise.resolve("Please enter a valid address or valid coordinates.");
                 alert("Please enter a valid address or valid coordinates.");
-                //wasSuccess = 0;
             }
             else {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
-                //wasSuccess = 1;
                 locationList[locationList.length-1].marker = addMarker(location);
-                //return Promise.resolve("Location Added");
             }
         }).catch((error) => alert("Address entered is not a real location"));
     }
@@ -310,21 +298,15 @@ function initMap() {
     // The coordinates of Berlin
     const berlin = { lat: 52.531677, lng: 13.381777 };
 
-    const locationOneMarkerCoords = { lat: 52.731677, lng: 13.381777 };
-    const locationTwoMarkerCoords = { lat: 52.831677, lng: 13.381777 };
-    const locationThreeMarkerCoords = { lat: 52.931677, lng: 13.381777 };
+    const locationOneMarkerCoords = { lat: 52.457776, lng: 13.527499 };
+    const locationTwoMarkerCoords = { lat: 52.462778, lng: 13.516392 };
+    const locationThreeMarkerCoords = { lat: 52.526482, lng: 13.493836 };
 
     // The map, centered around Berlin
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
         center: berlin
     });
-
-    // The marker, positioned at Berlin
-    // const marker2 = new google.maps.Marker({
-    //     position: berlin,
-    //     map: map,
-    // });
 
     nameInputString = locationOne.name;
     streetInputString = locationOne.street;

@@ -189,6 +189,17 @@ button:hover {
 
 /* add-screen*/
 
+/* .form-field {
+    display: flex;
+    align-items: center;
+} */
+
+textarea {
+    resize: none;
+    vertical-align: middle;
+    margin: 3px 3px 5px 3px;
+} 
+
 #add-screen {
     display: none;
 }
