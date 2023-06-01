@@ -31,13 +31,16 @@ let currentUser;
 let currentLocationIndex;
 let locationList = [];
 let map;
+let nameInputString = "";
+let streetInputString = "";
+let postalCodeInputString = "";
 
 //hard-coded locations
-let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
+let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße 76", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
 let locationTwo = new Location("Goethestraße", "Backsteinpflaster und Autos die auf beiden Seiten parken behindern Fahrradmobilität",
-"Goethestraße", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
+"Goethestraße 55", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
 let locationThree = new Location("Herzbergstraße", "Auf der Herzbergstraße teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst.",
- "Herzbergstraße", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
+ "Herzbergstraße 126", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
 locationList.push(locationOne, locationTwo, locationThree);
 
 function Location(name, description, street, postalCode, city, district, lat, long, marker) {
@@ -109,9 +112,11 @@ addButtonSubmit.addEventListener("click", (e) => {
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-                    addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value);
-    locationList.push(newLocation);
+    // let newLocation =  new Location(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+    //                 addForm.city.value, addForm.district.value, addForm.latitude.value, addForm.longitude.value);
+    // locationList.push(newLocation);
+
+    locationCanBeCreated = true;
     
     let newSelectOption = document.createElement("option");
     newSelectOption.innerHTML = addForm.name.value;
@@ -121,6 +126,13 @@ addForm.addEventListener("submit", (e) => {
     loadMainScreen(currentUser);
     addForm.reset();
 })
+
+const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
+    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
+    console.log("WOW: " + newLocation.name);
+    console.log("LOL XD: " + newLocation.lat);
+    locationList.push(newLocation);
+}
 
 //details-screen
 updateButton.addEventListener("click", (e) => {
@@ -246,9 +258,6 @@ const inputHasCoordinatesAndIsANumber = () => {
     return (latitudeInput.value != "" && !isNaN(latitudeInput.value)) && (longitudeInput.value != "" && !isNaN(longitudeInput.value));
 }
 
-let nameInputString = "";
-let streetInputString = "";
-
 const convertInputToMarker = () => {
     let location = {
         lat: Number(""),
@@ -287,6 +296,12 @@ const convertInputToMarker = () => {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
                 locationList[locationList.length-1].marker = addMarker(location);
+
+                if (locationCanBeCreated) {
+                    setNewLocation(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
+                        addForm.city.value, addForm.district.value, location.lat, location.lng);
+                        locationCanBeCreated = false;
+                }
             }
         }).catch((error) => alert("Address entered is not a real location"));
     }
@@ -310,12 +325,15 @@ function initMap() {
 
     nameInputString = locationOne.name;
     streetInputString = locationOne.street;
+    postalCodeInputString = locationOne.postalCode;
     locationOne.marker = addMarker(locationOneMarkerCoords);
     nameInputString = locationTwo.name;
     streetInputString = locationTwo.street;
+    postalCodeInputString = locationTwo.postalCode;
     locationTwo.marker = addMarker(locationTwoMarkerCoords);
     nameInputString = locationThree.name;
     streetInputString = locationThree.street;
+    postalCodeInputString = locationThree.postalCode;
     locationThree.marker = addMarker(locationThreeMarkerCoords);
 }
 
@@ -329,7 +347,8 @@ function addMarker(location) {
     const contentString = `<h1>`
     + nameInputString 
     + `</h1><p style= "font-size: 25px;" >Is located at: <b>` 
-    + streetInputString
+    + streetInputString + ", "
+    + postalCodeInputString
     + `</b></p>`;
     const infowindow = new google.maps.InfoWindow({
         content: contentString,
