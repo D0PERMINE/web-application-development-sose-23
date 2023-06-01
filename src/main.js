@@ -88,10 +88,11 @@ addButton.addEventListener("click", (e) => {
 locationSelect.addEventListener("change", (e) =>{
     let selectedLocation = locationSelect.options.selectedIndex;
 
-    locationSelect.options[locationSelect.selectedIndex].selected = false;
-
+    locationSelect.options[selectedLocation].selected = false;
+    console.log(selectedLocation);
+    console.log(locationList.length);
     currentLocationIndex = findLocationInList(selectedLocation);
-
+    console.log(currentLocationIndex);
     changeDetailsScreen(currentLocationIndex);
 
     loadDetailsScreen(currentUser);
@@ -105,9 +106,9 @@ addScreenCancelButton.addEventListener("click", (e) => {
 })
 
 //Timos Add-button für Map-Pins
-addButtonSubmit.addEventListener("click", (e) => {
-    convertInputToMarker();
-})
+// addButtonSubmit.addEventListener("click", (e) => {
+//     convertInputToMarker();
+// })
 
 addForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -118,6 +119,10 @@ addForm.addEventListener("submit", (e) => {
 
     locationCanBeCreated = true;
     
+    convertInputToMarker();
+    locationList[locationList.length-1].name = nameInput.value;
+    locationList[locationList.length-1].street = nameInput.value;
+    locationList[locationList.length-1].postalCode = nameInput.value;
     let newSelectOption = document.createElement("option");
     newSelectOption.innerHTML = addForm.name.value;
 
@@ -128,10 +133,12 @@ addForm.addEventListener("submit", (e) => {
 })
 
 const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
+    console.log(street);
     let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
     console.log("WOW: " + newLocation.name);
     console.log("LOL XD: " + newLocation.lat);
     locationList.push(newLocation);
+    console.log(locationList.length);
 }
 
 //details-screen
@@ -220,6 +227,7 @@ function changeLocation(locationIndex) {
 }
 
 function changeDetailsScreen(locationIndex) {
+    console.log(locationIndex);
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
     updateForm.street.value = locationList[locationIndex].street;
@@ -258,6 +266,7 @@ const inputHasCoordinatesAndIsANumber = () => {
     return (latitudeInput.value != "" && !isNaN(latitudeInput.value)) && (longitudeInput.value != "" && !isNaN(longitudeInput.value));
 }
 
+let meinArray = [];
 const convertInputToMarker = () => {
     let location = {
         lat: Number(""),
@@ -274,9 +283,15 @@ const convertInputToMarker = () => {
         location.lat = Number(latitudeInput.value);
         location.lng = Number(longitudeInput.value);
         //wasSuccess = 1;
+        if (locationCanBeCreated) {
+            setNewLocation(nameInput, descriptionInput, streetInput, postalCodeInput,
+                cityInput, addForm.district.value, location.lat, location.lng);
+                locationCanBeCreated = false;
+        }
         locationList[locationList.length-1].marker = addMarker(location);
-        return Promise.resolve("Location Added");
+        
     } else {
+        console.log(streetInput.value);
         nameInputString = nameInput.value;
         streetInputString = streetInput.value;
         address = streetInput.value + ", "
@@ -288,6 +303,8 @@ const convertInputToMarker = () => {
             + "?address=" + address
             + "&key=" + API_KEY;
 
+            meinArray = [nameInput.value, descriptionInput.value, streetInput.value, postalCodeInput.value,
+                cityInput.value, districtInput.value]
         makeGetRequest(url).then((result) => {
             if(result.results[0].address_components.length <= 4) {
                 alert("Please enter a valid address or valid coordinates.");
@@ -296,11 +313,11 @@ const convertInputToMarker = () => {
                 location.lat = result.results[0].geometry.location.lat;
                 location.lng = result.results[0].geometry.location.lng;
                 locationList[locationList.length-1].marker = addMarker(location);
-
+                console.log(result);
                 if (locationCanBeCreated) {
-                    setNewLocation(addForm.name.value, addForm.description.value, addForm.street.value, addForm.postalCode.value,
-                        addForm.city.value, addForm.district.value, location.lat, location.lng);
+                    setNewLocation(meinArray[0], meinArray[1], meinArray[2], meinArray[3], meinArray[4], meinArray[5], location.lat, location.lng);
                         locationCanBeCreated = false;
+                        console.log("hier: " + meinArray[2]);
                 }
             }
         }).catch((error) => alert("Address entered is not a real location"));
@@ -352,7 +369,7 @@ function addMarker(location) {
     + `</b></p>`;
     const infowindow = new google.maps.InfoWindow({
         content: contentString,
-        ariaLabel: nameInputString + "LOOOOOOOL"
+        ariaLabel: nameInputString
     });
   
     marker.addListener("click", () => {
