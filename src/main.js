@@ -145,6 +145,7 @@ updateButton.addEventListener("click", (e) => {
 
 deleteButton.addEventListener("click", (e) => {
     locationSelect.removeChild(locationSelect.children[indexOfSelectedLocation]);
+    locationList.splice(indexOfSelectedLocation, 1);
     console.log("length map: " + markerList.length)
 
     markerList[indexOfSelectedLocation].setMap(null);
