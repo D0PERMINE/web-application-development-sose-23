@@ -113,24 +113,11 @@ addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     locationCanBeCreated = true;
-
+    
     convertInputToMarker();
-
-    addForm.reset();
+     
+    addForm.reset(); 
 })
-
-const createAndAddNewElementToList = () => {
-    let newSelectOption = document.createElement("option");
-    newSelectOption.innerHTML = addForm.name.value;
-
-    locationSelect.appendChild(newSelectOption);
-}
-
-const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
-    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
-
-    locationList.push(newLocation);
-}
 
 //details-screen
 updateButton.addEventListener("click", (e) => {
@@ -146,7 +133,6 @@ updateButton.addEventListener("click", (e) => {
 deleteButton.addEventListener("click", (e) => {
     locationSelect.removeChild(locationSelect.children[indexOfSelectedLocation]);
     locationList.splice(indexOfSelectedLocation, 1);
-    console.log("length map: " + markerList.length)
 
     markerList[indexOfSelectedLocation].setMap(null);
     markerList.splice(indexOfSelectedLocation, 1);
@@ -210,7 +196,7 @@ function changeLocation(locationIndex) {
     locationList[locationIndex].description = updateForm.description.value;
     locationList[locationIndex].street = updateForm.street.value;
     locationList[locationIndex].postalCode = updateForm.postalCode.value;
-    locationList[locationIndex].city = updateForm.city.value;
+    //locationList[locationIndex].city = updateForm.city.value;
     locationList[locationIndex].district = updateForm.district.value;
     locationList[locationIndex].lat = updateForm.latitude.value;
     locationList[locationIndex].long = updateForm.longitude.value;
@@ -220,7 +206,6 @@ function changeLocation(locationIndex) {
 }
 
 function changeDetailsScreen(locationIndex) {
-    console.log(locationIndex);
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
     updateForm.street.value = locationList[locationIndex].street;
@@ -276,7 +261,7 @@ const convertInputToMarker = () => {
         district: ""
     };
 
-    let serviceType = "";
+    
 
 
     /* 4 Fälle
@@ -320,6 +305,19 @@ const convertInputToMarker = () => {
         loadMainScreen(currentUser);
     }
 
+}
+
+const createAndAddNewElementToList = () => {
+    let newSelectOption = document.createElement("option");
+    newSelectOption.innerHTML = addForm.name.value;
+
+    locationSelect.appendChild(newSelectOption);
+}
+
+const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
+    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
+
+    locationList.push(newLocation);
 }
 
 const setServiceType = (serviceType) => {
