@@ -11,3 +11,15 @@ https://fonts.google.com/specimen/Roboto
 
 Marker-Info:
 https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
+
+Start/Stop mongodb sever with brew on macOS:
+brew services start mongodb-community@4.4
+brew services stop mongodb-community@4.4
+
+Install node dependencies(node-modules) and start the server:
+npm install
+npm start 
+(open localhost with correct port in the browser)
+
+Localhost url:
+http://localhost:3000/
