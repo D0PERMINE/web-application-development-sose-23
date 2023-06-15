@@ -1,34 +1,189 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<script src="javascripts/script.js" async defer></script>
-<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
-<title>Login-Demo</title>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel='stylesheet' type='text/css' href='css/style.css'>
+
+    <!-- google-maps -->
+    <script defer src="src/main.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
 </head>
+
 <body>
-<div id="login">
+    <div id="login-screen">
+        <h1>Locations with Poor Bicycle-Infrastructure in Berlin</h1>
 
-<form id="myForm">
+        <form id="login-form">
+            <div class="img-container">
+                <img src="resources/images/green_berlin.jpeg" alt="green_berlin" class="img-green-berlin">
+            </div>
 
-  <div class="imgcontainer">
-    <img src="images/butterfly.gif" alt="Avatar" class="avatar">
-  </div>
+            <div class="login-form-container">
 
-  <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+                <div id="login-error-msg-holder">
+                    <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+                </div>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+                <label><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
 
-    <button type="submit">Click me to get data from a server</button>
-  </div>
+                <label><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
 
-  <div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn">Cancel</button>
-    <span class="psw">Forgot <a href="#">password?</a></span>
-  </div>
-</form>
-</div>
+                <button id="login-button" type="submit">Login</button>
+                <!-- <label>
+                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                    </label> -->
+            </div>
+
+            <!-- <div class="container" style="background-color:#f1f1f1">
+              <button type="button" class="cancel-btn">Cancel</button>
+              <span class="psw">Forgot <a href="#">password?</a></span>
+            </div> -->
+        </form>
+
+        <footer class="footer">
+            <a href="">Imprint</a>
+            <a href="">Privacy</a>
+        </footer>
+    </div>
+
+    <div id="main-screen">
+        <p id="welcome" class="welcome">Welcome to our page. </p>
+        <p class="p2">Below you can see locations of non-sustainable bicycle infrastructure in Berlin. </p>
+        <div class="main-map-container">
+            <div class="text">
+                <select id="locations-select" size="8">
+                    <option>Wilhelminenhofstraße</option>
+                    <option>Goethestraße</option>
+                    <option>Herzbergstraße</option>
+                </select>
+            </div>
+
+            <div>
+                <!-- <div class="img-container">
+                    <img class="img-fahrradwege-berlin" src="resources/images/fahrradwege_berlin.png"
+                        alt="fahrradwege_berlin">
+                    <br>
+                    <img class="img-fahrradwege-berlin-legende" src="resources/images/fahrradwege_berlin_legende.png"
+                        alt="fahrradwege_berlin_legende">
+                </div> -->
+                <div class="google-maps-container">
+                    <!-- google-maps -->
+                    <div id="map"></div>
+                    <script
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ&callback=initMap&v=weekly"
+                        defer></script>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        
+        <button id="main-screen-add-button" class="small-button" type="submit">ADD</button>
+        <button id="logout-button" class="small-button" type="submit">LOGOUT</button>
+        
+
+        <footer class="footer">
+            <a href="">Imprint</a>
+            <a href="">Privacy</a>
+        </footer>
+    </div>
+
+    <div id="add-screen">
+        <h1 class="add-title">ADD</h1>
+        <h2 class="add-notif">Please enter a valid address and/or valid coordinates of the location.</h2>
+
+        <form id="add-form" class="add">
+            <label for="name">*Name:</label>
+            <input type="text" id="name" name="name" required></br>
+            <div class="form-field">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" cols="26"></textarea>
+            </div>
+            <!-- <input type="text" id="description" name="description"></br> -->
+
+            <label for="street">Street & House No.:</label>
+            <input type="text" id="street" name="street"></br>
+
+            <label for="postal-code">Postal Code:</label>
+            <input type="text" id="postal-code" name="postalCode"></br>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" value="Berlin"></br>
+
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district"></br>
+
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude"></br>
+
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude"></br>
+
+            <p>* Diese Felder müssen ausgefüllt werden</p>
+            <!-- submit zu button ändern falls map pins resettet werden-->
+            <button id="add-screen-add-button" class="small-button" type="submit">Save</button>
+            <button id="add-screen-cancel-button" class="small-button" type="button">Cancel</button>
+        </form>
+        
+        <footer class="footer">
+            <a href="">Imprint</a>
+            <a href="">Privacy</a>
+        </footer>
+    </div>
+
+    <div id="details-screen">
+        <h1 class="details-title">LOCATION-DETAILS</h1>
+
+        <form id="update-form" class="update">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name"></br>
+
+            <div class="form-field">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" cols="26"></textarea></br>
+            </div>
+
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street"></br>
+
+            <label for="postal-code">Postal Code::</label>
+            <input type="text" id="postal-code" name="postalCode"></br>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" value="Berlin" readonly></br>
+
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district"></br>
+
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude"></br>
+
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude"></br>
+
+            <button id="update-button" class="small-button" type="submit">Update</button>
+            <button id="delete-button" class="small-button" type="button">Delete</button>
+            <button id="details-screen-cancel-button" class="small-button" type="button">Cancel</button>
+        </form>
+
+        <footer class="footer">
+            <a href="">Imprint</a>
+            <a href="">Privacy</a>
+        </footer>
+    </div>
+
 </body>
+
+
+</html>
