@@ -1,0 +1,15 @@
+{
+    "user_admina": {
+        "username": "admina",
+        "password": "admina",
+        "role": "admin"
+    }, 
+
+    "user_normalo": {
+        "username": "normalo",
+        "password": "normalo",
+        "role": "non-admin"
+    }
+
+}
+
