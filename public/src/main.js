@@ -313,7 +313,7 @@ const convertInputToMarker = () => {
                 console.log("LMAO added")
                 createNewLocationWhenInputAddressIsValid(locationProperties, result);
             }
-        }).catch((error) => alert("The request you have send is invalid. Please try again."));
+        }).catch((error) => alert("The request you have sent is invalid. Please try again."));
 
         createAndAddNewElementToList();
 
@@ -368,7 +368,7 @@ const updateLocation = () => {
             else {
                 createNewLocationWhenInputAddressIsValid(locationProperties, result);
             }
-        }).catch((error) => alert("The request you have send is invalid. Please try again."));
+        }).catch((error) => alert("The request you have sent is invalid. Please try again."));
 
         adjustElementNameInList();
 
@@ -485,12 +485,12 @@ const createNewLocationWhenInputAddressIsValid = (locationProperties, result) =>
     setLocationProperties(locationProperties, result);
     prepareNameAndStreetForInfoWindow(locationProperties);
     setMarkerIsReady = true;
-    addMarker(locationProperties);
+    //addMarker(locationProperties);
     console.log(result);
     
     if (locationCanBeCreated) {
         setNewLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
-        
+        addMarker(locationProperties);
 
         locationCanBeCreated = false;
     } else if (locationCanBeUpdated) {
@@ -498,8 +498,8 @@ const createNewLocationWhenInputAddressIsValid = (locationProperties, result) =>
         updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
 
         // console.log("loca: " + locationProperties.lat + ", " + locationProperties.lng)
-        // let latlng = new google.maps.LatLng(locationProperties.lat, locationProperties.lng);
-        // changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
+        let latlng = new google.maps.LatLng(locationProperties.lat, locationProperties.lng);
+        changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
 
         locationCanBeUpdated = false;
     }
