@@ -561,6 +561,7 @@ function initMap() {
         center: berlin
     });
 
+    locationCanBeCreated = true;
     nameInputString = locationOne.name;
     streetInputString = locationOne.street;
     postalCodeInputString = locationOne.postalCode;
@@ -576,6 +577,7 @@ function initMap() {
     postalCodeInputString = locationThree.postalCode;
     // locationThree.marker = addMarker(locationThreeMarkerCoords);
     addMarker(locationThreeMarkerCoords);
+    locationCanBeCreated = false;
 }
 
 // Function for adding a marker to the page.
@@ -612,7 +614,7 @@ function addMarker(location) {
 
 const setMarker = (marker, location) => {
     if(locationCanBeCreated) {
-        console.log("SET MARKER!!!");
+        console.log("SET MARKER!!!: " + marker);
         markerList.push(marker);
     } 
     // else if (locationCanBeUpdated) {
