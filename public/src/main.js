@@ -482,25 +482,25 @@ const setLocationProperties = (locationProperties, data) => {
             locationProperties.district = data.results[0].address_components[2].long_name;
         } else {
             alert("Those coordinates only provide very limited details about this location. Please enter appropriate coordinates for a better result.");
-            locationProperties.street = "unknown";
-            locationProperties.postalCode = "unknown";
-            locationProperties.city = "Berlin";
-            locationProperties.district = "unknown";
+            setUnknownLocation(locationProperties);
         }
         locationProperties.lat = data.results[0].geometry.location.lat;
         locationProperties.lng = data.results[0].geometry.location.lng;
     }
     else {
-        locationProperties.city = "Berlin";
+        alert("Added entry without information. Please change address or coordinates of the location to produce a marker.");
+        setUnknownLocation(locationProperties);
         locationProperties.lat = inputValues[6];
         locationProperties.lng = inputValues[7];
     }
 }
 
-// const setLocationCoordinates = (locationProperties, data) => {
-//     locationProperties.lat = data.results[0].geometry.location.lat;
-//     locationProperties.lng = data.results[0].geometry.location.lng;
-// }
+const setUnknownLocation = (locationProperties) => {
+    locationProperties.street = "unknown";
+    locationProperties.postalCode = "unknown";
+    locationProperties.city = "Berlin";
+    locationProperties.district = "unknown";
+}
 
 // google-maps
 // Initialize and add the map
