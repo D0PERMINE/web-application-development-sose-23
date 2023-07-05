@@ -277,8 +277,9 @@ const convertInputToMarker = () => {
         createNewLocationSetUp(locationProperties);
 
         makeGetRequest(url).then((result) => {
-            console.log("LOLLLL added")
-            createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);
+            console.log("LOLLLL added");
+            console.log(result);
+            createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);       
         })
         createAndAddNewElementToList();
 
@@ -490,6 +491,7 @@ const createNewLocationWhenInputAddressIsValid = (locationProperties, result) =>
 }
 
 const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result) => {
+    console.log("hallo");
     setLocationProperties(locationProperties, result);
     prepareNameAndStreetForInfoWindow(locationProperties);
     // addMarker(new google.maps.LatLng(inputValues[6], inputValues[7]));
@@ -512,22 +514,35 @@ const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result
 }
 
 const setLocationProperties = (locationProperties, data) => {
-    if (locationProperties.postalCode = data.results[0].address_components.length > 7) {
-        locationProperties.street = data.results[0].address_components[1].long_name + " "
-            + data.results[0].address_components[0].long_name;
+    console.log("ashejthal");
+    console.log(typeof data.status);
+    console.log(data.status);
+    console.log(data.status === "ZERO_RESULTS");
+    console.log(data.status != "ZERO_RESULTS");
+    if(data.status != "ZERO_RESULTS") {
+        if (data.results[0].address_components.length > 7) {
+            locationProperties.street = data.results[0].address_components[1].long_name + " "
+                + data.results[0].address_components[0].long_name;
 
-        locationProperties.postalCode = data.results[0].address_components[7].long_name;
-        locationProperties.city = data.results[0].address_components[3].long_name;
-        locationProperties.district = data.results[0].address_components[2].long_name;
-    } else {
-        alert("Those coordinates only provide very limited details about this location. Please enter appropriate coordinates for a better result.");
-        locationProperties.street = "unknown";
-        locationProperties.postalCode = "unknown";
-        locationProperties.city = "Berlin";
-        locationProperties.district = "unknown";
+            locationProperties.postalCode = data.results[0].address_components[7].long_name;
+            locationProperties.city = data.results[0].address_components[3].long_name;
+            locationProperties.district = data.results[0].address_components[2].long_name;
+        } else {
+            console.log(data);
+            alert("Those coordinates only provide very limited details about this location. Please enter appropriate coordinates for a better result.");
+            locationProperties.street = "unknown";
+            locationProperties.postalCode = "unknown";
+            locationProperties.city = "Berlin";
+            locationProperties.district = "unknown";
+        }
+        locationProperties.lat = data.results[0].geometry.location.lat;
+        locationProperties.lng = data.results[0].geometry.location.lng;
     }
-    locationProperties.lat = data.results[0].geometry.location.lat;
-    locationProperties.lng = data.results[0].geometry.location.lng;
+    else {
+        locationProperties.city = "Berlin";
+        locationProperties.lat = inputValues[6];
+        locationProperties.lng = inputValues[7];
+    }
 }
 
 // const setLocationCoordinates = (locationProperties, data) => {
