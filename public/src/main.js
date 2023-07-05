@@ -1,3 +1,5 @@
+// import "./script_vorgabe";
+
 const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("login-button");
 const loginErrorMsg = document.getElementById("login-error-msg");
@@ -68,6 +70,9 @@ loginButton.addEventListener("click", (e) => {
     e.preventDefault();
     const username = loginForm.username.value;
     const password = loginForm.password.value;
+
+    console.log("data: " + sendReqGet());
+    // sendReqGet();
 
     if (username === "admina" && password === "admina") {
         currentUser = "admina";
