@@ -29,14 +29,13 @@ const detailsScreenCancelButton = document.getElementById("details-screen-cancel
 
 let currentUser;
 let indexOfSelectedLocation;
+let indexOfSelectedMarker;
 let locationList = [];
 let markerList = [];
-let infowindows = [];
 let map;
 let nameInputString = "";
 let streetInputString = "";
 let postalCodeInputString = "";
-let infowindow;
 let inputValues = [];
 let queryParamValue = "";
 let responseType = "json";
@@ -95,9 +94,9 @@ addButton.addEventListener("click", (e) => {
 })
 
 locationSelect.addEventListener("change", (e) => {
-    getIndexOfSelectedLocation();
+    findIndexOfSelectedLocation()
     locationSelect.options[indexOfSelectedLocation].selected = false;
-    changeDetailsScreen(getIndexOfSelectedLocation());
+    changeDetailsScreen(indexOfSelectedLocation);
 
     loadDetailsScreen(currentUser);
 })
@@ -115,8 +114,6 @@ addForm.addEventListener("submit", (e) => {
     locationCanBeCreated = true;
     
     convertInputToMarker();
-
-   // console.log(locationCanBeCreated);
      
     addForm.reset(); 
 })
@@ -215,11 +212,6 @@ function findIndexOfSelectedLocation() {
 
 }
 
-const getIndexOfSelectedLocation = () => {
-    findIndexOfSelectedLocation();
-    return indexOfSelectedLocation;
-}
-
 const makeGetRequest = (url) => {
     return fetch(url).then((response) => response.json());
 }
@@ -229,7 +221,6 @@ const inputHasCoordinatesAndIsANumberAddForm = () => {
 }
 
 const inputHasAddressAddForm = () => {
-    console.log("streetinput: " + updateForm.street.value)
     return streetInput.value != ""
         && postalCodeInput.value != ""
         && cityInput.value != "";
@@ -240,7 +231,6 @@ const inputHasCoordinatesAndIsANumberUpdateForm = () => {
 }
 
 const inputHasAddressUpdateForm = () => {
-    console.log("streetinput: " + updateForm.street.value)
     return updateForm.street.value != ""
         && updateForm.postalCode.value != ""
         && updateForm.city.value != "";
@@ -277,8 +267,6 @@ const convertInputToMarker = () => {
         createNewLocationSetUp(locationProperties);
 
         makeGetRequest(url).then((result) => {
-            console.log("LOLLLL added");
-            console.log(result);
             createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);       
         })
         createAndAddNewElementToList();
@@ -295,7 +283,6 @@ const convertInputToMarker = () => {
                     + "Please enter a valid address or valid coordinates.");
             }
             else {
-                console.log("LMAO added")
                 createNewLocationWhenInputAddressIsValid(locationProperties, result);
             }
         }).catch((error) => alert("The request you have sent is invalid. Please try again."));
@@ -334,7 +321,6 @@ const updateLocation = () => {
         createNewLocationSetUp(locationProperties);
 
         makeGetRequest(url).then((result) => {
-            console.log("IM HERE!!");
             createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);
         })
         adjustElementNameInList();
@@ -382,11 +368,7 @@ const setNewLocation = (name, description, street, postalCode, city, district, l
 const updateCurrentLocation = (name, description, street, postalCode, city, district, lat, long) => {
     let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
 
-    // console.log("name: " + newLocation.name + " street: " + newLocation.street + " postal code: " + newLocation.postalCode + " city: " + newLocation.city + " lat: " + newLocation.lat + " lng: " + newLocation.long)
-
     locationList[indexOfSelectedLocation] = newLocation;
-
-    // locationList.push(newLocation);
 }
 
 const setServiceType = (serviceType) => {
@@ -401,17 +383,6 @@ const createNewLocationSetUp = (locationProperties) => {
     setInputValues();
     prepareQueryParamValueForUrl();
     setUrl(responseType, queryParamValue, API_KEY, serviceType);
-}
-
-const prepareNameAndStreetForInfoWindow = (locationProperties) => {
-    if(locationCanBeCreated) {
-        nameInputString = nameInput.value;
-    } else if (locationCanBeUpdated) {
-        nameInputString = updateForm.name.value;
-    }
-
-    streetInputString = locationProperties.street;
-    postalCodeInputString = locationProperties.postalCode;
 }
 
 const prepareQueryParamValueForUrl = () => {
@@ -461,16 +432,11 @@ const setInputValues = () => {
     } else if (locationCanBeUpdated) {
         inputValues = [updateForm.name.value, updateForm.description.value, updateForm.street.value, updateForm.postalCode.value,
             updateForm.city.value, updateForm.district.value, updateForm.latitude.value, updateForm.longitude.value];
-
-        // console.log("name123: " + updateForm.name.value + " street: " + updateForm.street.value + " postal code: " + updateForm.postalCode.value + " city: " + updateForm.city.value + " lat: " + updateForm.latitude.value + " lng: " + updateForm.longitude.value)
     }
 }
 
 const createNewLocationWhenInputAddressIsValid = (locationProperties, result) => {
     setLocationProperties(locationProperties, result);
-    prepareNameAndStreetForInfoWindow(locationProperties);
-    //addMarker(locationProperties);
-    console.log(result);
     
     if (locationCanBeCreated) {
         setNewLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
@@ -478,24 +444,17 @@ const createNewLocationWhenInputAddressIsValid = (locationProperties, result) =>
 
         locationCanBeCreated = false;
     } else if (locationCanBeUpdated) {
-        // deleteMarker();
         updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
 
-        // console.log("loca: " + locationProperties.lat + ", " + locationProperties.lng)
         let latlng = new google.maps.LatLng(locationProperties.lat, locationProperties.lng);
         changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
-        changeMarkerInfoWindow(markerList[indexOfSelectedLocation], contentString, nameInputString);
 
         locationCanBeUpdated = false;
     }
 }
 
 const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result) => {
-    console.log("hallo");
     setLocationProperties(locationProperties, result);
-    prepareNameAndStreetForInfoWindow(locationProperties);
-    // addMarker(new google.maps.LatLng(inputValues[6], inputValues[7]));
-    console.log(result);
 
     if (locationCanBeCreated) {
         setNewLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
@@ -507,18 +466,12 @@ const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result
         
         let latlng = new google.maps.LatLng(inputValues[6], inputValues[7]);
         changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
-        changeMarkerInfoWindow(markerList[indexOfSelectedLocation], contentString, nameInputString);
 
         locationCanBeUpdated = false;
     }
 }
 
 const setLocationProperties = (locationProperties, data) => {
-    console.log("ashejthal");
-    console.log(typeof data.status);
-    console.log(data.status);
-    console.log(data.status === "ZERO_RESULTS");
-    console.log(data.status != "ZERO_RESULTS");
     if(data.status != "ZERO_RESULTS") {
         if (data.results[0].address_components.length > 7) {
             locationProperties.street = data.results[0].address_components[1].long_name + " "
@@ -528,7 +481,6 @@ const setLocationProperties = (locationProperties, data) => {
             locationProperties.city = data.results[0].address_components[3].long_name;
             locationProperties.district = data.results[0].address_components[2].long_name;
         } else {
-            console.log(data);
             alert("Those coordinates only provide very limited details about this location. Please enter appropriate coordinates for a better result.");
             locationProperties.street = "unknown";
             locationProperties.postalCode = "unknown";
@@ -594,39 +546,30 @@ function addMarker(location) {
     });
     
     setMarker(marker, location);
-    console.log("marker lnegth: " + markerList.length);
-    
-    const contentString = `<h1>`
-        + nameInputString
-        + `</h1><p style= "font-size: 20px;" >Is located at: <b>`
-        + streetInputString + ", "
-        + postalCodeInputString
-        + `</b></p>`;
-
-    const infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        ariaLabel: nameInputString
-    });
-
-    infowindows.push(infowindow);
 
     marker.addListener("click", () => {
-        infowindow.open({
-            anchor: marker,
-            map,
-        });
+        findIndexOfSelectedMarker(marker);
+        changeDetailsScreen(indexOfSelectedMarker);
+
+        loadDetailsScreen(currentUser);
     });
 
 }
 
+function findIndexOfSelectedMarker(marker) {
+    
+    for (let i = 0; i < markerList.length; i++) {
+        if (marker === markerList[i]) {
+            indexOfSelectedLocation = i;
+            indexOfSelectedMarker = i;
+        }
+    }
+}
+
 const setMarker = (marker, location) => {
     if(locationCanBeCreated) {
-        console.log("SET MARKER!!!: " + marker);
         markerList.push(marker);
     } 
-    // else if (locationCanBeUpdated) {
-    //     markerList[indexOfSelectedLocation].setPosition(location);
-    // } 
 }
 
 const changeMarkerPosition = (marker, location) => {
@@ -634,21 +577,8 @@ const changeMarkerPosition = (marker, location) => {
     markerList[indexOfSelectedLocation].setPosition(location)
 }
 
-const changeMarkerInfoWindow = (marker, contentString, nameInputString) => {
-    infowindows[indexOfSelectedLocation].setContent(contentString);
-    infowindows[indexOfSelectedLocation].setAriaLabel(nameInputString);
-    markerList[indexOfSelectedLocation].addListener("click", () => {
-        infowindows[indexOfSelectedLocation].open({
-            anchor: markerList[indexOfSelectedLocation],
-            map,    
-        });
-    });
-}
-
 const deleteMarker = () => {
-    console.log("index marker: " + indexOfSelectedLocation)
     markerList[indexOfSelectedLocation].setMap(null);
-    console.log("index marker2: " + indexOfSelectedLocation)
     // markerList.splice(indexOfSelectedLocation, 1);
 }
 
