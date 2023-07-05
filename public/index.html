@@ -34,10 +34,10 @@
                 </div>
 
                 <label><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="username" required>
+                <input type="text" placeholder="Enter Username" name="username" value = "admina" required>
 
                 <label><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="password" required>
+                <input type="password" placeholder="Enter Password" name="password" value = "admina" required>
 
                 <button id="login-button" type="submit">Login</button>
                 <!-- <label>
@@ -130,7 +130,8 @@
             <label for="longitude">Longitude:</label>
             <input type="text" id="longitude" name="longitude"></br>
 
-            <p>* Diese Felder müssen ausgefüllt werden</p>
+            <p>Coordinates are always prioritized over addresses!</p>
+            <p>* Entry is mandatory </p>
             <!-- submit zu button ändern falls map pins resettet werden-->
             <button id="add-screen-add-button" class="small-button" type="submit">Save</button>
             <button id="add-screen-cancel-button" class="small-button" type="button">Cancel</button>
@@ -147,30 +148,30 @@
 
         <form id="update-form" class="update">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name"></br>
+            <input type="text" id="name-input-update" name="name"></br>
 
             <div class="form-field">
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" cols="26"></textarea></br>
+                <textarea id="description-input-update" name="description" rows="4" cols="26"></textarea></br>
             </div>
 
             <label for="street">Street:</label>
-            <input type="text" id="street" name="street"></br>
+            <input type="text" id="street-input-update" name="street"></br>
 
             <label for="postal-code">Postal Code::</label>
-            <input type="text" id="postal-code" name="postalCode"></br>
+            <input type="text" id="postal-code-input-update" name="postalCode"></br>
 
             <label for="city">City:</label>
-            <input type="text" id="city" name="city" value="Berlin" readonly></br>
+            <input type="text" id="city-input-update" name="city" value="Berlin" readonly></br>
 
             <label for="district">District:</label>
-            <input type="text" id="district" name="district"></br>
+            <input type="text" id="district-input-update" name="district"></br>
 
             <label for="latitude">Latitude:</label>
-            <input type="text" id="latitude" name="latitude"></br>
+            <input type="text" id="latitude-input-update" name="latitude"></br>
 
             <label for="longitude">Longitude:</label>
-            <input type="text" id="longitude" name="longitude"></br>
+            <input type="text" id="longitude-input-update" name="longitude"></br>
 
             <button id="update-button" class="small-button" type="submit">Update</button>
             <button id="delete-button" class="small-button" type="button">Delete</button>

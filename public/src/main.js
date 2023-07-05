@@ -29,18 +29,17 @@ const detailsScreenCancelButton = document.getElementById("details-screen-cancel
 
 let currentUser;
 let indexOfSelectedLocation;
+let indexOfSelectedMarker;
 let locationList = [];
 let markerList = [];
 let map;
 let nameInputString = "";
 let streetInputString = "";
 let postalCodeInputString = "";
-let infowindow;
 let inputValues = [];
 let queryParamValue = "";
 let responseType = "json";
 let url;
-let setMarkerIsReady = false;
 
 const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
@@ -95,9 +94,9 @@ addButton.addEventListener("click", (e) => {
 })
 
 locationSelect.addEventListener("change", (e) => {
-    getIndexOfSelectedLocation();
+    findIndexOfSelectedLocation()
     locationSelect.options[indexOfSelectedLocation].selected = false;
-    changeDetailsScreen(getIndexOfSelectedLocation());
+    changeDetailsScreen(indexOfSelectedLocation);
 
     loadDetailsScreen(currentUser);
 })
@@ -120,12 +119,12 @@ addForm.addEventListener("submit", (e) => {
 })
 
 //details-screen
-updateButton.addEventListener("click", (e) => {
+updateForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    changeLocation(currentLocationIndex);
+    locationCanBeUpdated = true;
 
-    loadMainScreen(currentUser);
+    updateLocation();
 
     updateForm.reset();
 })
@@ -191,20 +190,6 @@ function loadDetailsScreen(currentUser) {
     }
 }
 
-function changeLocation(locationIndex) {
-    locationList[locationIndex].name = updateForm.name.value;
-    locationList[locationIndex].description = updateForm.description.value;
-    locationList[locationIndex].street = updateForm.street.value;
-    locationList[locationIndex].postalCode = updateForm.postalCode.value;
-    //locationList[locationIndex].city = updateForm.city.value;
-    locationList[locationIndex].district = updateForm.district.value;
-    locationList[locationIndex].lat = updateForm.latitude.value;
-    locationList[locationIndex].long = updateForm.longitude.value;
-    let updatedLocationMarkerCoords = new google.maps.LatLng(updateForm.latitude.value, updateForm.longitude.value);
-    // locationList[locationIndex].marker.setPosition(updatedLocationMarkerCoords);
-    marker[locationIndex].marker.setPosition(updatedLocationMarkerCoords);
-}
-
 function changeDetailsScreen(locationIndex) {
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
@@ -218,7 +203,7 @@ function changeDetailsScreen(locationIndex) {
 
 function findIndexOfSelectedLocation() {
     let selectedLocation = locationSelect.options.selectedIndex;
-
+    
     for (let i = 0; i < locationList.length; i++) {
         if (i == selectedLocation) {
             indexOfSelectedLocation = i;
@@ -227,42 +212,44 @@ function findIndexOfSelectedLocation() {
 
 }
 
-const getIndexOfSelectedLocation = () => {
-    findIndexOfSelectedLocation();
-    return indexOfSelectedLocation;
-}
-
 const makeGetRequest = (url) => {
     return fetch(url).then((response) => response.json());
 }
 
-const inputHasCoordinatesAndIsANumber = () => {
+const inputHasCoordinatesAndIsANumberAddForm = () => {
     return (latitudeInput.value != "" && !isNaN(latitudeInput.value)) && (longitudeInput.value != "" && !isNaN(longitudeInput.value));
 }
 
-const inputHasAddress = () => {
+const inputHasAddressAddForm = () => {
     return streetInput.value != ""
-        && postalCodeInput != ""
-        && cityInput != "";
+        && postalCodeInput.value != ""
+        && cityInput.value != "";
+}
+
+const inputHasCoordinatesAndIsANumberUpdateForm = () => {
+    return (updateForm.latitude.value != "" && !isNaN(updateForm.latitude.value)) && (updateForm.longitude.value != "" && !isNaN(updateForm.longitude.value));
+}
+
+const inputHasAddressUpdateForm = () => {
+    return updateForm.street.value != ""
+        && updateForm.postalCode.value != ""
+        && updateForm.city.value != "";
 }
 
 let locationCanBeCreated;
 
-const convertInputToMarker = () => {
-    let positionProperties = {
-        lat: Number(""),
-        lng: Number("")
-    };
+let locationCanBeUpdated;
 
-    let addressProperties = {
+const convertInputToMarker = () => {
+
+    let locationProperties = {
         street: "",
         postalCode: "",
         city: "",
-        district: ""
-    };
-
-    
-
+        district: "",
+        lat: Number(""),
+        lng: Number("")
+    }
 
     /* 4 Fälle
     1. Weder adresse, noch koordinaten angegeben
@@ -272,23 +259,23 @@ const convertInputToMarker = () => {
                                             Fall 2 eintritt, dann werden die Koordinaten so oder so bevorzugt
     */
 
-    if (!inputHasAddress() && !inputHasCoordinatesAndIsANumber()) {
+    if (!inputHasAddressAddForm() && !inputHasCoordinatesAndIsANumberAddForm()) {
         alert("Please insert a valid address or valid coordinates.")
     }
-    else if (inputHasCoordinatesAndIsANumber()) {
+    else if (inputHasCoordinatesAndIsANumberAddForm()) {
         setServiceType("CoordinatesToAddress");
-        createNewLocationSetUp();
+        createNewLocationSetUp(locationProperties);
 
         makeGetRequest(url).then((result) => {
-            createNewLocationWhenInputCoordinatesIsValid(addressProperties, result);
+            createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);       
         })
         createAndAddNewElementToList();
 
         loadMainScreen(currentUser);
     }
-    else if (inputHasAddress()) {
+    else if (inputHasAddressAddForm()) {
         setServiceType("AddressToCoordinates");
-        createNewLocationSetUp();
+        createNewLocationSetUp(locationProperties);
 
         makeGetRequest(url).then((result) => {
             if (inputHasInvalidAddress(result)) {
@@ -296,11 +283,65 @@ const convertInputToMarker = () => {
                     + "Please enter a valid address or valid coordinates.");
             }
             else {
-                createNewLocationWhenInputAddressIsValid(positionProperties, result);
+                createNewLocationWhenInputAddressIsValid(locationProperties, result);
             }
-        }).catch((error) => alert("The request you have send is invalid. Please try again."));
+        }).catch((error) => alert("The request you have sent is invalid. Please try again."));
 
         createAndAddNewElementToList();
+
+        loadMainScreen(currentUser);
+    }
+
+}
+
+const updateLocation = () => {
+
+    let locationProperties = {
+        street: "",
+        postalCode: "",
+        city: "",
+        district: "",
+        lat: Number(""),
+        lng: Number("")
+    }
+
+    /* 4 Fälle
+    1. Weder adresse, noch koordinaten angegeben
+    2. Nur koordinaten angegeben
+    3. Nur adresse angegeben
+    4. Adresse und koordinten angegeben   //brauch man nicht, weil wenn 
+                                            Fall 2 eintritt, dann werden die Koordinaten so oder so bevorzugt
+    */
+
+    if (!inputHasAddressUpdateForm() && !inputHasCoordinatesAndIsANumberUpdateForm()) {
+        alert("Please insert a valid address or valid coordinates.")
+    }
+    else if (inputHasCoordinatesAndIsANumberUpdateForm()) {
+        setServiceType("CoordinatesToAddress");
+        createNewLocationSetUp(locationProperties);
+
+        makeGetRequest(url).then((result) => {
+            createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);
+        })
+        adjustElementNameInList();
+
+        loadMainScreen(currentUser);
+    }
+    else if (inputHasAddressUpdateForm()) {
+        setServiceType("AddressToCoordinates");
+        createNewLocationSetUp(locationProperties);
+
+        makeGetRequest(url).then((result) => {
+            if (inputHasInvalidAddress(result)) {
+                alert("This is not a valid address.\n"
+                    + "Please enter a valid address or valid coordinates.");
+            }
+            else {
+                createNewLocationWhenInputAddressIsValid(locationProperties, result);
+            }
+        }).catch((error) => alert("The request you have sent is invalid. Please try again."));
+
+        adjustElementNameInList();
 
         loadMainScreen(currentUser);
     }
@@ -314,10 +355,20 @@ const createAndAddNewElementToList = () => {
     locationSelect.appendChild(newSelectOption);
 }
 
+const adjustElementNameInList = () => {
+    locationSelect[indexOfSelectedLocation].innerHTML = updateForm.name.value
+}
+
 const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
     let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
 
     locationList.push(newLocation);
+}
+
+const updateCurrentLocation = (name, description, street, postalCode, city, district, lat, long) => {
+    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
+
+    locationList[indexOfSelectedLocation] = newLocation;
 }
 
 const setServiceType = (serviceType) => {
@@ -328,27 +379,33 @@ const setServiceType = (serviceType) => {
     }
 }
 
-const createNewLocationSetUp = () => {
+const createNewLocationSetUp = (locationProperties) => {
     setInputValues();
-    prepareNameAndStreetForInfoWindow();
     prepareQueryParamValueForUrl();
     setUrl(responseType, queryParamValue, API_KEY, serviceType);
 }
 
-const prepareNameAndStreetForInfoWindow = () => {
-    nameInputString = nameInput.value;
-    streetInputString = streetInput.value;
-}
-
 const prepareQueryParamValueForUrl = () => {
-    if (serviceType == "AddressToCoordinates") {
-        queryParamValue = streetInput.value + ", "
-            + postalCodeInput.value + ", "
-            + cityInput.value;
-    } else if (serviceType == "CoordinatesToAddress") {
-        queryParamValue = latitudeInput.value + ", "
-            + longitudeInput.value;
+    if(locationCanBeCreated) {
+        if (serviceType == "AddressToCoordinates") {
+            queryParamValue = streetInput.value + ", "
+                + postalCodeInput.value + ", "
+                + cityInput.value;
+        } else if (serviceType == "CoordinatesToAddress") {
+            queryParamValue = latitudeInput.value + ", "
+                + longitudeInput.value;
+        }
+    } else if (locationCanBeUpdated) {
+        if (serviceType == "AddressToCoordinates") {
+            queryParamValue = updateForm.street.value + ", "
+                + updateForm.postalCode.value + ", "
+                + updateForm.city.value;
+        } else if (serviceType == "CoordinatesToAddress") {
+            queryParamValue = updateForm.latitude.value + ", "
+                + updateForm.longitude.value;
+        }
     }
+    
 }
 
 const setUrl = (responseType, queryParamValue, apiKey, serviceType) => {
@@ -369,54 +426,80 @@ const inputHasInvalidAddress = (result) => {
 }
 
 const setInputValues = () => {
-    inputValues = [nameInput.value, descriptionInput.value, streetInput.value, postalCodeInput.value,
-    cityInput.value, districtInput.value, latitudeInput.value, longitudeInput.value];
+    if(locationCanBeCreated) {
+        inputValues = [nameInput.value, descriptionInput.value, streetInput.value, postalCodeInput.value,
+        cityInput.value, districtInput.value, latitudeInput.value, longitudeInput.value];
+    } else if (locationCanBeUpdated) {
+        inputValues = [updateForm.name.value, updateForm.description.value, updateForm.street.value, updateForm.postalCode.value,
+            updateForm.city.value, updateForm.district.value, updateForm.latitude.value, updateForm.longitude.value];
+    }
 }
 
-const createNewLocationWhenInputAddressIsValid = (positionProperties, result) => {
-    setLocationCoordinates(positionProperties, result);
-    setMarkerIsReady = true;
-    addMarker(positionProperties);
-    console.log(result);
+const createNewLocationWhenInputAddressIsValid = (locationProperties, result) => {
+    setLocationProperties(locationProperties, result);
+    
+    if (locationCanBeCreated) {
+        setNewLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
+        addMarker(locationProperties);
+
+        locationCanBeCreated = false;
+    } else if (locationCanBeUpdated) {
+        updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
+
+        let latlng = new google.maps.LatLng(locationProperties.lat, locationProperties.lng);
+        changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
+
+        locationCanBeUpdated = false;
+    }
+}
+
+const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result) => {
+    setLocationProperties(locationProperties, result);
 
     if (locationCanBeCreated) {
-        setNewLocation(inputValues[0], inputValues[1], inputValues[2], inputValues[3], inputValues[4], inputValues[5], positionProperties.lat, positionProperties.lng);
+        setNewLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
+        addMarker(new google.maps.LatLng(inputValues[6], inputValues[7]));
+
         locationCanBeCreated = false;
+    } else if (locationCanBeUpdated) {
+        updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
+        
+        let latlng = new google.maps.LatLng(inputValues[6], inputValues[7]);
+        changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
+
+        locationCanBeUpdated = false;
     }
 }
 
-const createNewLocationWhenInputCoordinatesIsValid = (addressProperties, result) => {
-    setLocationAddress(addressProperties, result);
-    setMarkerIsReady = true;
-    addMarker(new google.maps.LatLng(inputValues[6], inputValues[7]));
-    console.log(result);
+const setLocationProperties = (locationProperties, data) => {
+    if(data.status != "ZERO_RESULTS") {
+        if (data.results[0].address_components.length > 7) {
+            locationProperties.street = data.results[0].address_components[1].long_name + " "
+                + data.results[0].address_components[0].long_name;
 
-    if (locationCanBeCreated) {
-        setNewLocation(inputValues[0], inputValues[1], addressProperties.street, addressProperties.postalCode, addressProperties.city, addressProperties.district, inputValues[6], inputValues[7]);
-        locationCanBeCreated = false;
+            locationProperties.postalCode = data.results[0].address_components[7].long_name;
+            locationProperties.city = data.results[0].address_components[3].long_name;
+            locationProperties.district = data.results[0].address_components[2].long_name;
+        } else {
+            alert("Those coordinates only provide very limited details about this location. Please enter appropriate coordinates for a better result.");
+            setUnknownLocation(locationProperties);
+        }
+        locationProperties.lat = data.results[0].geometry.location.lat;
+        locationProperties.lng = data.results[0].geometry.location.lng;
+    }
+    else {
+        alert("Added entry without information. Please change address or coordinates of the location to produce a marker.");
+        setUnknownLocation(locationProperties);
+        locationProperties.lat = inputValues[6];
+        locationProperties.lng = inputValues[7];
     }
 }
 
-const setLocationAddress = (addressProperties, data) => {
-    if (addressProperties.postalCode = data.results[0].address_components.length > 7) {
-        addressProperties.street = data.results[0].address_components[1].long_name + " "
-            + data.results[0].address_components[0].long_name;
-
-        addressProperties.postalCode = data.results[0].address_components[7].long_name;
-        addressProperties.city = data.results[0].address_components[3].long_name;
-        addressProperties.district = data.results[0].address_components[2].long_name;
-    } else {
-        alert("Those coordinates only provide very limited details about this location. Please enter appropriate coordinates for a better result.");
-        addressProperties.street = "unknown";
-        addressProperties.postalCode = "unknown";
-        addressProperties.city = "unknown";
-        addressProperties.district = "unknown";
-    }
-}
-
-const setLocationCoordinates = (positionProperties, data) => {
-    positionProperties.lat = data.results[0].geometry.location.lat;
-    positionProperties.lng = data.results[0].geometry.location.lng;
+const setUnknownLocation = (locationProperties) => {
+    locationProperties.street = "unknown";
+    locationProperties.postalCode = "unknown";
+    locationProperties.city = "Berlin";
+    locationProperties.district = "unknown";
 }
 
 // google-maps
@@ -435,6 +518,7 @@ function initMap() {
         center: berlin
     });
 
+    locationCanBeCreated = true;
     nameInputString = locationOne.name;
     streetInputString = locationOne.street;
     postalCodeInputString = locationOne.postalCode;
@@ -450,6 +534,7 @@ function initMap() {
     postalCodeInputString = locationThree.postalCode;
     // locationThree.marker = addMarker(locationThreeMarkerCoords);
     addMarker(locationThreeMarkerCoords);
+    locationCanBeCreated = false;
 }
 
 // Function for adding a marker to the page.
@@ -460,33 +545,41 @@ function addMarker(location) {
         title: nameInputString
     });
     
-    setMarker(marker);
-    console.log("marker lnegth: " + markerList.length);
-    
-    const contentString = `<h1>`
-        + nameInputString
-        + `</h1><p style= "font-size: 20px;" >Is located at: <b>`
-        + streetInputString + ", "
-        + postalCodeInputString
-        + `</b></p>`;
-
-    const infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        ariaLabel: nameInputString
-    });
+    setMarker(marker, location);
 
     marker.addListener("click", () => {
-        infowindow.open({
-            anchor: marker,
-            map,
-        });
+        findIndexOfSelectedMarker(marker);
+        changeDetailsScreen(indexOfSelectedMarker);
+
+        loadDetailsScreen(currentUser);
     });
 
 }
 
-const setMarker = (marker) => {
-    console.log("SET MARKER!!!");
-    markerList.push(marker);
+function findIndexOfSelectedMarker(marker) {
+    
+    for (let i = 0; i < markerList.length; i++) {
+        if (marker === markerList[i]) {
+            indexOfSelectedLocation = i;
+            indexOfSelectedMarker = i;
+        }
+    }
+}
+
+const setMarker = (marker, location) => {
+    if(locationCanBeCreated) {
+        markerList.push(marker);
+    } 
+}
+
+const changeMarkerPosition = (marker, location) => {
+    // marker.setPosition(location);
+    markerList[indexOfSelectedLocation].setPosition(location)
+}
+
+const deleteMarker = () => {
+    markerList[indexOfSelectedLocation].setMap(null);
+    // markerList.splice(indexOfSelectedLocation, 1);
 }
 
 window.initMap = initMap;
