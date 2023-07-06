@@ -1,3 +1,5 @@
+// import "./script_vorgabe";
+
 const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("login-button");
 const loginErrorMsg = document.getElementById("login-error-msg");
@@ -44,14 +46,59 @@ let url;
 const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
 //hard-coded locations
-let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße 76", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
-let locationTwo = new Location("Goethestraße", "Backsteinpflaster und Autos die auf beiden Seiten parken behindern Fahrradmobilität",
-    "Goethestraße 55", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
-let locationThree = new Location("Herzbergstraße", "Auf der Herzbergstraße teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst.",
-    "Herzbergstraße 126", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
-locationList.push(locationOne, locationTwo, locationThree);
+// let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße 76", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
+// let locationTwo = new Location("Goethestraße", "Backsteinpflaster und Autos die auf beiden Seiten parken behindern Fahrradmobilität",
+//     "Goethestraße 55", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
+// let locationThree = new Location("Herzbergstraße", "Auf der Herzbergstraße teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst.",
+//     "Herzbergstraße 126", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
+// locationList.push(locationOne, locationTwo, locationThree);
 
-function Location(name, description, street, postalCode, city, district, lat, long) {
+// Funktion zum Abrufen der Locations vom Server
+async function fetchLocations() {
+    fetch('/locations')
+      .then((response) => response.json())
+      .then((result) => {
+        // Alle Locations im "locationList"-Array speichern
+        console.log(result);
+        locationList = result;
+        for (let i = 0; i < locationList.length; i++) {
+            locationList[i].id = result[i]._id;
+            console.log(locationList[i].id);
+            console.log(locationList[i].name);
+            let newSelectOption = document.createElement("option");
+            newSelectOption.innerHTML = locationList[i].name;
+            locationSelect.appendChild(newSelectOption);
+            locationCanBeCreated = true;
+            console.log(locationList[i].lat);
+            let latlng = new google.maps.LatLng(locationList[i].lat, locationList[i].long);
+            addMarker(latlng);
+            locationCanBeCreated = false;
+        }
+        // Weitere Verarbeitung oder Anzeige der Daten
+        console.log(locationList.length);
+        console.log(locationList); // Zeige die Locations im Array an
+      })
+      .catch((error) => {
+        console.log('Fehler beim Abrufen der Locations:', error);
+      });
+  }
+
+  // Aufruf der Funktion zum Abrufen der Locations
+window.addEventListener( "load", (e) => {
+    window.initMap = initMap;
+    fetchLocations();
+    
+    console.log(locationList.length);
+    // for (let i = 0; i < locationList.length; i++) {
+    //     let newSelectOption = document.createElement("option");
+    //     newSelectOption.innerHTML = locationList[i].name;
+    //     locationSelect.appendChild(newSelectOption);
+    // }
+})
+  
+
+function Location(id, name, description, street, postalCode, city, district, lat, long) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.street = street;
@@ -63,24 +110,51 @@ function Location(name, description, street, postalCode, city, district, lat, lo
     // this.marker = marker;
 }
 
+function retrieveDocuments() {
+    console.log("HIERRRRR");
+    fetch('/users')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Retrieved documents:', data);
+            // Do something with the retrieved documents
+        })
+        .catch(error => console.error('Error retrieving documents:', error));
+}
+
 //login-screen
 loginButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const username = loginForm.username.value;
+
+    const userId = loginForm.username.value;
     const password = loginForm.password.value;
 
-    if (username === "admina" && password === "admina") {
-        currentUser = "admina";
-        loadMainScreen(currentUser);
-        loginForm.reset();
-    } else if (username === "normalo" && password === "normalo") {
-        currentUser = "normalo";
-        loadMainScreen(currentUser);
-        loginForm.reset();
-    } else {
-        loginErrorMsg.style.opacity = 1;
-        loginForm.reset();
-    }
+    // Senden der GET-Anfrage an den Server
+    fetch(`/login?userId=${userId}&password=${password}`)
+        .then((response) => response.json())
+        .then((result) => {
+            // Verarbeite das Ergebnis der Serverantwort
+            if (result.success && userId == "admina") {
+                currentUser = "admina";
+                loadMainScreen(currentUser);
+                loginForm.reset();
+                // Login erfolgreich, fahre fort
+                // z.B. Umleitung zur Hauptseite oder Ausführen anderer Aktionen
+            } else if (result.success && userId == "normalo") {
+                currentUser = "normalo";
+                loadMainScreen(currentUser);
+                loginForm.reset();
+            }
+            else {
+                loginErrorMsg.style.opacity = 1;
+                loginForm.reset();
+                // Ungültige Anmeldeinformationen
+                // z.B. Anzeige einer Fehlermeldung
+            }
+        })
+        .catch((error) => {
+            // Fehler beim Senden der Anfrage oder Empfangen der Antwort
+            console.log('Fehler beim Anfordern der Überprüfung der Login-Daten:', error);
+        });
 })
 
 //main-screen
@@ -112,10 +186,10 @@ addForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     locationCanBeCreated = true;
-    
+
     convertInputToMarker();
-     
-    addForm.reset(); 
+
+    addForm.reset();
 })
 
 //details-screen
@@ -130,6 +204,9 @@ updateForm.addEventListener("submit", (e) => {
 })
 
 deleteButton.addEventListener("click", (e) => {
+    console.log(locationList);
+    console.log(locationList[indexOfSelectedLocation].id);
+    deleteLocationEntry(locationList[indexOfSelectedLocation].id);
     locationSelect.removeChild(locationSelect.children[indexOfSelectedLocation]);
     locationList.splice(indexOfSelectedLocation, 1);
 
@@ -191,6 +268,7 @@ function loadDetailsScreen(currentUser) {
 }
 
 function changeDetailsScreen(locationIndex) {
+    console.log(locationList[locationIndex].name);
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
     updateForm.street.value = locationList[locationIndex].street;
@@ -203,7 +281,7 @@ function changeDetailsScreen(locationIndex) {
 
 function findIndexOfSelectedLocation() {
     let selectedLocation = locationSelect.options.selectedIndex;
-    
+
     for (let i = 0; i < locationList.length; i++) {
         if (i == selectedLocation) {
             indexOfSelectedLocation = i;
@@ -267,7 +345,7 @@ const convertInputToMarker = () => {
         createNewLocationSetUp(locationProperties);
 
         makeGetRequest(url).then((result) => {
-            createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);       
+            createNewLocationWhenInputCoordinatesIsValid(locationProperties, result);
         })
         createAndAddNewElementToList();
 
@@ -360,15 +438,88 @@ const adjustElementNameInList = () => {
 }
 
 const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
-    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
-
-    locationList.push(newLocation);
+    
+    const locationData = {
+        name: name,
+        description: description,
+        street: street,
+        postalCode: postalCode,
+        city: city,
+        district: district,
+        lat: lat,
+        long: long
+    };
+    let createdEntryId;
+    fetch('/locations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(locationData)
+    })
+    .then((response) => response.json())
+    .then((result) => {
+        console.log("new id: " + result.id); // "Eintrag erfolgreich erstellt"
+        
+        createdEntryId = result.id; // Erhaltene ID des neu erstellten Eintrags
+        
+        // Speichere die ID für spätere Verwendung oder Zugriffe
+        let newLocation = new Location(createdEntryId, name, description, street, postalCode, city, district, lat, long);
+        
+        locationList.push(newLocation);
+        console.log(createdEntryId);
+    })
+    .catch((error) => {
+        console.log('Fehler beim Erstellen des Eintrags:', error);
+    });
+    
 }
 
-const updateCurrentLocation = (name, description, street, postalCode, city, district, lat, long) => {
-    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
+const updateCurrentLocation = (id, name, description, street, postalCode, city, district, lat, long) => {
+    let newLocation = new Location(id, name, description, street, postalCode, city, district, lat, long);
+
+    const locationId = locationList[indexOfSelectedLocation].id; // ID des Eintrags, der aktualisiert werden soll
+    const updatedLocationData = {
+        id: id,
+        name: name,
+        description: description,
+        street: street,
+        postalCode: postalCode,
+        city: city,
+        district: district,
+        lat: lat,
+        long: long
+    };
+
+    fetch(`/locations/${locationId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedLocationData)
+    })
+        .then((response) => response.text())
+        .then((result) => {
+            console.log(result); // "Eintrag erfolgreich aktualisiert"
+        })
+        .catch((error) => {
+            console.log('Fehler beim Aktualisieren des Eintrags:', error);
+        });
 
     locationList[indexOfSelectedLocation] = newLocation;
+}
+
+const deleteLocationEntry = (locationId) => {
+    fetch(`/locations/${locationId}`, {
+        method: 'DELETE'
+      })
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result); // "Eintrag erfolgreich gelöscht"
+      })
+      .catch((error) => {
+        console.log('Fehler beim Löschen des Eintrags:', error);
+      });
 }
 
 const setServiceType = (serviceType) => {
@@ -386,7 +537,7 @@ const createNewLocationSetUp = (locationProperties) => {
 }
 
 const prepareQueryParamValueForUrl = () => {
-    if(locationCanBeCreated) {
+    if (locationCanBeCreated) {
         if (serviceType == "AddressToCoordinates") {
             queryParamValue = streetInput.value + ", "
                 + postalCodeInput.value + ", "
@@ -405,7 +556,7 @@ const prepareQueryParamValueForUrl = () => {
                 + updateForm.longitude.value;
         }
     }
-    
+
 }
 
 const setUrl = (responseType, queryParamValue, apiKey, serviceType) => {
@@ -426,25 +577,25 @@ const inputHasInvalidAddress = (result) => {
 }
 
 const setInputValues = () => {
-    if(locationCanBeCreated) {
+    if (locationCanBeCreated) {
         inputValues = [nameInput.value, descriptionInput.value, streetInput.value, postalCodeInput.value,
         cityInput.value, districtInput.value, latitudeInput.value, longitudeInput.value];
     } else if (locationCanBeUpdated) {
         inputValues = [updateForm.name.value, updateForm.description.value, updateForm.street.value, updateForm.postalCode.value,
-            updateForm.city.value, updateForm.district.value, updateForm.latitude.value, updateForm.longitude.value];
+        updateForm.city.value, updateForm.district.value, updateForm.latitude.value, updateForm.longitude.value];
     }
 }
 
 const createNewLocationWhenInputAddressIsValid = (locationProperties, result) => {
     setLocationProperties(locationProperties, result);
-    
+
     if (locationCanBeCreated) {
         setNewLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
         addMarker(locationProperties);
 
         locationCanBeCreated = false;
     } else if (locationCanBeUpdated) {
-        updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
+        updateCurrentLocation(locationList[indexOfSelectedLocation].id, inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
 
         let latlng = new google.maps.LatLng(locationProperties.lat, locationProperties.lng);
         changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
@@ -462,8 +613,8 @@ const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result
 
         locationCanBeCreated = false;
     } else if (locationCanBeUpdated) {
-        updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
-        
+        updateCurrentLocation(locationList[indexOfSelectedLocation].id, inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
+
         let latlng = new google.maps.LatLng(inputValues[6], inputValues[7]);
         changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
 
@@ -472,7 +623,7 @@ const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result
 }
 
 const setLocationProperties = (locationProperties, data) => {
-    if(data.status != "ZERO_RESULTS") {
+    if (data.status != "ZERO_RESULTS") {
         if (data.results[0].address_components.length > 7) {
             locationProperties.street = data.results[0].address_components[1].long_name + " "
                 + data.results[0].address_components[0].long_name;
@@ -518,23 +669,35 @@ function initMap() {
         center: berlin
     });
 
-    locationCanBeCreated = true;
-    nameInputString = locationOne.name;
-    streetInputString = locationOne.street;
-    postalCodeInputString = locationOne.postalCode;
-    // locationOne.marker = addMarker(locationOneMarkerCoords);
-    addMarker(locationOneMarkerCoords);
-    nameInputString = locationTwo.name;
-    streetInputString = locationTwo.street;
-    postalCodeInputString = locationTwo.postalCode;
-    // locationTwo.marker = addMarker(locationTwoMarkerCoords);
-    addMarker(locationTwoMarkerCoords);
-    nameInputString = locationThree.name;
-    streetInputString = locationThree.street;
-    postalCodeInputString = locationThree.postalCode;
-    // locationThree.marker = addMarker(locationThreeMarkerCoords);
-    addMarker(locationThreeMarkerCoords);
-    locationCanBeCreated = false;
+    //     function fetchLocations() {
+    //     fetch('/locations')
+    //       .then((response) => response.json())
+    //       .then((result) => {
+    //         // Alle Locations im "locationList"-Array speichern
+    //         locationList = result;
+
+    //         // Weitere Verarbeitung oder Anzeige der Daten
+    //         console.log(locationList); // Zeige die Locations im Array an
+    //       })
+    //       .catch((error) => {
+    //         console.log('Fehler beim Abrufen der Locations:', error);
+    //       });
+    //   }
+
+    //     function getLatLongById(locationId) {
+    //         fetch(`/locations/${locationId}`)
+    //             .then((response) => response.json())
+    //             .then((result) => {
+    //             const lat = result.lat; // Lat-Wert des Eintrags
+    //             const long = result.long; // Long-Wert des Eintrags
+
+    //             return [lat, long];
+    //             })
+    //             .catch((error) => {
+    //                 console.log('Fehler beim Abrufen des Eintrags:', error);
+    //             });
+    //     }
+    
 }
 
 // Function for adding a marker to the page.
@@ -542,9 +705,9 @@ function addMarker(location) {
     let marker = new google.maps.Marker({
         position: location,
         map: map,
-        title: nameInputString
+        // title: nameInputString
     });
-    
+
     setMarker(marker, location);
 
     marker.addListener("click", () => {
@@ -557,7 +720,7 @@ function addMarker(location) {
 }
 
 function findIndexOfSelectedMarker(marker) {
-    
+
     for (let i = 0; i < markerList.length; i++) {
         if (marker === markerList[i]) {
             indexOfSelectedLocation = i;
@@ -567,9 +730,9 @@ function findIndexOfSelectedMarker(marker) {
 }
 
 const setMarker = (marker, location) => {
-    if(locationCanBeCreated) {
+    if (locationCanBeCreated) {
         markerList.push(marker);
-    } 
+    }
 }
 
 const changeMarkerPosition = (marker, location) => {
@@ -582,4 +745,4 @@ const deleteMarker = () => {
     // markerList.splice(indexOfSelectedLocation, 1);
 }
 
-window.initMap = initMap;
+
