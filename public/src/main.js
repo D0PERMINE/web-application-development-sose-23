@@ -179,6 +179,7 @@ updateForm.addEventListener("submit", (e) => {
 })
 
 deleteButton.addEventListener("click", (e) => {
+    deleteLocationEntry(locationList[indexOfSelectedLocation].id);
     locationSelect.removeChild(locationSelect.children[indexOfSelectedLocation]);
     locationList.splice(indexOfSelectedLocation, 1);
 
@@ -479,6 +480,19 @@ const updateCurrentLocation = (id, name, description, street, postalCode, city, 
         });
 
     locationList[indexOfSelectedLocation] = newLocation;
+}
+
+const deleteLocationEntry = (locationId) => {
+    fetch(`/locations/${locationId}`, {
+        method: 'DELETE'
+      })
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result); // "Eintrag erfolgreich gelöscht"
+      })
+      .catch((error) => {
+        console.log('Fehler beim Löschen des Eintrags:', error);
+      });
 }
 
 const setServiceType = (serviceType) => {

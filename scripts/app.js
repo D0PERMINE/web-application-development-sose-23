@@ -166,9 +166,25 @@ app.put('/locations/:id', (req, res) => {
       }
     );
   });
-  
-  
 
+// DELETE-Endpunkt zum Löschen eines Eintrags in der "locations"-Collection
+app.delete('/locations/:id', (req, res) => {
+  const id = req.params.id;
+
+  // Lösche den Eintrag aus der "locations"-Collection
+  db.collection('locations').deleteOne({ _id: mongodb.ObjectID(id) }, (err, result) => {
+    if (err) {
+      console.log('Fehler beim Löschen des Eintrags:', err);
+      res.status(500).send('Interner Serverfehler');
+    } else {
+      if (result.deletedCount > 0) {
+        res.send('Eintrag erfolgreich gelöscht');
+      } else {
+        res.status(404).send('Eintrag nicht gefunden');
+      }
+    }
+  });
+});
   
 
 // Starte den Server
