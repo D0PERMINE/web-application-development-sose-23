@@ -240,6 +240,7 @@ function loadDetailsScreen(currentUser) {
 }
 
 function changeDetailsScreen(locationIndex) {
+    console.log(locationList[locationIndex].name);
     updateForm.name.value = locationList[locationIndex].name;
     updateForm.description.value = locationList[locationIndex].description;
     updateForm.street.value = locationList[locationIndex].street;
@@ -446,11 +447,12 @@ const setNewLocation = (name, description, street, postalCode, city, district, l
     
 }
 
-const updateCurrentLocation = (name, description, street, postalCode, city, district, lat, long) => {
-    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
+const updateCurrentLocation = (id, name, description, street, postalCode, city, district, lat, long) => {
+    let newLocation = new Location(id, name, description, street, postalCode, city, district, lat, long);
 
     const locationId = locationList[indexOfSelectedLocation].id; // ID des Eintrags, der aktualisiert werden soll
     const updatedLocationData = {
+        id: id,
         name: name,
         description: description,
         street: street,
@@ -552,7 +554,7 @@ const createNewLocationWhenInputAddressIsValid = (locationProperties, result) =>
 
         locationCanBeCreated = false;
     } else if (locationCanBeUpdated) {
-        updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
+        updateCurrentLocation(locationList[indexOfSelectedLocation].id, inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, locationProperties.lat, locationProperties.lng);
 
         let latlng = new google.maps.LatLng(locationProperties.lat, locationProperties.lng);
         changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
@@ -570,7 +572,7 @@ const createNewLocationWhenInputCoordinatesIsValid = (locationProperties, result
 
         locationCanBeCreated = false;
     } else if (locationCanBeUpdated) {
-        updateCurrentLocation(inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
+        updateCurrentLocation(locationList[indexOfSelectedLocation].id, inputValues[0], inputValues[1], locationProperties.street, locationProperties.postalCode, locationProperties.city, locationProperties.district, inputValues[6], inputValues[7]);
 
         let latlng = new google.maps.LatLng(inputValues[6], inputValues[7]);
         changeMarkerPosition(markerList[indexOfSelectedLocation], latlng);
