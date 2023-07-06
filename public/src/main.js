@@ -72,7 +72,8 @@ locationList.push(locationOne, locationTwo, locationThree);
 //   // Aufruf der Funktion zum Abrufen der Locations
 //   fetchLocations();
 
-function Location(name, description, street, postalCode, city, district, lat, long) {
+function Location(id, name, description, street, postalCode, city, district, lat, long) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.street = street;
@@ -408,8 +409,7 @@ const adjustElementNameInList = () => {
 }
 
 const setNewLocation = (name, description, street, postalCode, city, district, lat, long) => {
-    let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
-
+    
     const locationData = {
         name: name,
         description: description,
@@ -420,7 +420,7 @@ const setNewLocation = (name, description, street, postalCode, city, district, l
         lat: lat,
         long: long
     };
-
+    let createdEntryId;
     fetch('/locations', {
         method: 'POST',
         headers: {
@@ -428,21 +428,28 @@ const setNewLocation = (name, description, street, postalCode, city, district, l
         },
         body: JSON.stringify(locationData)
     })
-        .then((response) => response.text())
-        .then((result) => {
-            console.log(result); // "Eintrag erfolgreich erstellt"
-        })
-        .catch((error) => {
-            console.log('Fehler beim Erstellen des Eintrags:', error);
-        });
-
-    locationList.push(newLocation);
+    .then((response) => response.json())
+    .then((result) => {
+        console.log("new id: " + result.id); // "Eintrag erfolgreich erstellt"
+        
+        createdEntryId = result.id; // Erhaltene ID des neu erstellten Eintrags
+        
+        // Speichere die ID für spätere Verwendung oder Zugriffe
+        let newLocation = new Location(createdEntryId, name, description, street, postalCode, city, district, lat, long);
+        
+        locationList.push(newLocation);
+        console.log(createdEntryId);
+    })
+    .catch((error) => {
+        console.log('Fehler beim Erstellen des Eintrags:', error);
+    });
+    
 }
 
 const updateCurrentLocation = (name, description, street, postalCode, city, district, lat, long) => {
     let newLocation = new Location(name, description, street, postalCode, city, district, lat, long);
 
-    const locationId = '12345'; // ID des Eintrags, der aktualisiert werden soll
+    const locationId = locationList[indexOfSelectedLocation].id; // ID des Eintrags, der aktualisiert werden soll
     const updatedLocationData = {
         name: name,
         description: description,

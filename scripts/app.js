@@ -102,10 +102,12 @@ app.post('/locations', (req, res) => {
       console.log('Fehler beim Erstellen des Eintrags:', err);
       res.status(500).send('Interner Serverfehler');
     } else {
-      res.send('Eintrag erfolgreich erstellt');
+      const createdEntryId = result.insertedId; // Erhaltene ID des neu erstellten Eintrags
+      res.send({ id: createdEntryId }); // Sendet die ID als JSON zurück
     }
   });
 });
+
 
 // GET-Endpunkt zum Abrufen aller Locations
 app.get('/locations', (req, res) => {
