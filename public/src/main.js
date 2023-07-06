@@ -54,7 +54,7 @@ const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 // locationList.push(locationOne, locationTwo, locationThree);
 
 // Funktion zum Abrufen der Locations vom Server
-function fetchLocations() {
+async function fetchLocations() {
     fetch('/locations')
       .then((response) => response.json())
       .then((result) => {
@@ -62,11 +62,17 @@ function fetchLocations() {
         console.log(result);
         locationList = result;
         for (let i = 0; i < locationList.length; i++) {
+            locationList[i].id = result[i]._id;
             console.log(locationList[i].id);
             console.log(locationList[i].name);
             let newSelectOption = document.createElement("option");
             newSelectOption.innerHTML = locationList[i].name;
             locationSelect.appendChild(newSelectOption);
+            locationCanBeCreated = true;
+            console.log(locationList[i].lat);
+            let latlng = new google.maps.LatLng(locationList[i].lat, locationList[i].long);
+            addMarker(latlng);
+            locationCanBeCreated = false;
         }
         // Weitere Verarbeitung oder Anzeige der Daten
         console.log(locationList.length);
@@ -79,7 +85,9 @@ function fetchLocations() {
 
   // Aufruf der Funktion zum Abrufen der Locations
 window.addEventListener( "load", (e) => {
+    window.initMap = initMap;
     fetchLocations();
+    
     console.log(locationList.length);
     // for (let i = 0; i < locationList.length; i++) {
     //     let newSelectOption = document.createElement("option");
@@ -689,26 +697,7 @@ function initMap() {
     //                 console.log('Fehler beim Abrufen des Eintrags:', error);
     //             });
     //     }
-
-
-
-    locationCanBeCreated = true;
-    nameInputString = locationOne.name;
-    streetInputString = locationOne.street;
-    postalCodeInputString = locationOne.postalCode;
-    // locationOne.marker = addMarker(locationOneMarkerCoords);
-    addMarker(locationOneMarkerCoords);
-    nameInputString = locationTwo.name;
-    streetInputString = locationTwo.street;
-    postalCodeInputString = locationTwo.postalCode;
-    // locationTwo.marker = addMarker(locationTwoMarkerCoords);
-    addMarker(locationTwoMarkerCoords);
-    nameInputString = locationThree.name;
-    streetInputString = locationThree.street;
-    postalCodeInputString = locationThree.postalCode;
-    // locationThree.marker = addMarker(locationThreeMarkerCoords);
-    addMarker(locationThreeMarkerCoords);
-    locationCanBeCreated = false;
+    
 }
 
 // Function for adding a marker to the page.
@@ -756,4 +745,4 @@ const deleteMarker = () => {
     // markerList.splice(indexOfSelectedLocation, 1);
 }
 
-window.initMap = initMap;
+
