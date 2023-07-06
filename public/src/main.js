@@ -46,31 +46,48 @@ let url;
 const API_KEY = "AIzaSyDxEI-CLi55TJFKgdMfxSRRVrr1i4NrgCQ";
 
 //hard-coded locations
-let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße 76", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
-let locationTwo = new Location("Goethestraße", "Backsteinpflaster und Autos die auf beiden Seiten parken behindern Fahrradmobilität",
-    "Goethestraße 55", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
-let locationThree = new Location("Herzbergstraße", "Auf der Herzbergstraße teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst.",
-    "Herzbergstraße 126", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
-locationList.push(locationOne, locationTwo, locationThree);
+// let locationOne = new Location("Wilhelminenhofstraße", "Fahrradweg geh nur in eine Richtung und bricht abrupt ab", "Wilhelminenhofstraße 76", 12459, "Berlin", "Schöneweide", 52.457776, 13.527499);
+// let locationTwo = new Location("Goethestraße", "Backsteinpflaster und Autos die auf beiden Seiten parken behindern Fahrradmobilität",
+//     "Goethestraße 55", 12459, "Berlin", "Schöneweide", 52.462778, 13.516392);
+// let locationThree = new Location("Herzbergstraße", "Auf der Herzbergstraße teilen sich Radfahrende, Autos und die Tram den begrenzten Raum. Weil der Straßenrand als Parkfläche genutzt wird, fahren Radfahrende bislang zwischen parkenden Autos und den Schienen, was Unfallgefahren birgt und zudem den Tramverkehr ausbremst.",
+//     "Herzbergstraße 126", 10365, "Berlin", "Lichtenberg", 52.526482, 13.493836);
+// locationList.push(locationOne, locationTwo, locationThree);
 
 // Funktion zum Abrufen der Locations vom Server
-// function fetchLocations() {
-//     fetch('/locations')
-//       .then((response) => response.json())
-//       .then((result) => {
-//         // Alle Locations im "locationList"-Array speichern
-//         locationList = result;
+function fetchLocations() {
+    fetch('/locations')
+      .then((response) => response.json())
+      .then((result) => {
+        // Alle Locations im "locationList"-Array speichern
+        console.log(result);
+        locationList = result;
+        for (let i = 0; i < locationList.length; i++) {
+            console.log(locationList[i].id);
+            console.log(locationList[i].name);
+            let newSelectOption = document.createElement("option");
+            newSelectOption.innerHTML = locationList[i].name;
+            locationSelect.appendChild(newSelectOption);
+        }
+        // Weitere Verarbeitung oder Anzeige der Daten
+        console.log(locationList.length);
+        console.log(locationList); // Zeige die Locations im Array an
+      })
+      .catch((error) => {
+        console.log('Fehler beim Abrufen der Locations:', error);
+      });
+  }
 
-//         // Weitere Verarbeitung oder Anzeige der Daten
-//         console.log(locationList); // Zeige die Locations im Array an
-//       })
-//       .catch((error) => {
-//         console.log('Fehler beim Abrufen der Locations:', error);
-//       });
-//   }
-
-//   // Aufruf der Funktion zum Abrufen der Locations
-//   fetchLocations();
+  // Aufruf der Funktion zum Abrufen der Locations
+window.addEventListener( "load", (e) => {
+    fetchLocations();
+    console.log(locationList.length);
+    // for (let i = 0; i < locationList.length; i++) {
+    //     let newSelectOption = document.createElement("option");
+    //     newSelectOption.innerHTML = locationList[i].name;
+    //     locationSelect.appendChild(newSelectOption);
+    // }
+})
+  
 
 function Location(id, name, description, street, postalCode, city, district, lat, long) {
     this.id = id;
@@ -179,6 +196,8 @@ updateForm.addEventListener("submit", (e) => {
 })
 
 deleteButton.addEventListener("click", (e) => {
+    console.log(locationList);
+    console.log(locationList[indexOfSelectedLocation].id);
     deleteLocationEntry(locationList[indexOfSelectedLocation].id);
     locationSelect.removeChild(locationSelect.children[indexOfSelectedLocation]);
     locationList.splice(indexOfSelectedLocation, 1);

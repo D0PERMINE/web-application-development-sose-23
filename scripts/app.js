@@ -117,6 +117,7 @@ app.get('/locations', (req, res) => {
         console.log('Fehler beim Abrufen der Locations:', err);
         res.status(500).send('Interner Serverfehler');
       } else {
+        console.log(result);
         res.send(result); // Alle Locations als JSON zurückgeben
       }
     });
